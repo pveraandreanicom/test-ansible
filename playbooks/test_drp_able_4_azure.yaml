@@ -1,0 +1,8 @@
+- name: test_drp_able_4_azure
+  tasks:
+    - name: Transfer script
+      copy: src=test_drp_able_4_azure.sh dest=/tmp mode=0555
+
+    - name: Execute
+      command: bash /tmp/test_drp_able_4_azure.sh
+    
