@@ -136,7 +136,7 @@ fi
 
 if [ "$OS" = "" ]; then
   echo "OS not supported"
-  #exit 1
+  exit 1
 fi
 
 # File systems	ext3, ext4, XFS, BTRFS (conditions applicable as per this table)
@@ -144,7 +144,7 @@ fi
 mount | grep "^/"  | grep -vEw 'ext3|ext4|xfs|brtfs' >/dev/null
 if [ $? -eq 0 ]; then
   echo "FS not supported"
-  #exit 1
+  exit 1
 fi
 
 # LVM
@@ -164,7 +164,7 @@ STRIPES4ROOT=""
 STRIPES4ROOT=$(lsblk -oMOUNTPOINT,PKNAME,KNAME -P | grep 'MOUNTPOINT="/"' | sort  | uniq -c | wc -l)
 if [ $STRIPES4ROOT -gt 1 ]; then
   echo "Root Filesystem is in more than one dev configuration not supported"
-  #exit 1
+  exit 1
 fi
 
 # Boot directory	
@@ -176,7 +176,7 @@ BOOTDISK=$(lsblk -oMOUNTPOINT,PKNAME -P | grep 'MOUNTPOINT="/boot"' | cut -d '"'
 #
 if [ "$BOOTDISK" = "" ]; then
   echo "Boot fs is not present. Configuration not supported"
-  #exit 1
+  exit 1
 fi
 # Boot disks mustn't be in GPT partition format. 
 #
@@ -185,7 +185,7 @@ do
   fdisk -l /dev/${i} | grep -i gpt
   if [ $? -eq 0 ]; then
     echo "Boot disk is gpt. Configuration not supported"
-    #exit 1
+    exit 1
   fi
 done
 # Multiple boot disks on a VM aren't supported
@@ -194,7 +194,7 @@ STRIPES4BOOT=""
 STRIPES4BOOT=$(lsblk -oMOUNTPOINT,PKNAME,KNAME -P | grep 'MOUNTPOINT="/boot"' | sort  | uniq -c | wc -l)
 if [ $STRIPES4BOOT -gt 1 ]; then
   echo "boot Filesystem is in more than one dev configuration not supported"
-  #exit 1
+  exit 1
 fi
 
 # Space
@@ -202,11 +202,11 @@ fi
 df -k / | awk '/^\// {if ($4 < 2097152) exit 1; }' > /dev/null
 if [ $? -ne 0 ]; then
   echo "Space on / insufficient. Configuration not supported"
-  #exit 1
+  exit 1
 fi
 
 df -k /usr | awk '/^\// {if ($4 < 2097152) exit 1; }' > /dev/null
 if [ $? -ne 0 ]; then
   echo "Space on /usr insufficient. Configuration not supported"
-  #exit 1
+  exit 1
 fi
