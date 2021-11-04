@@ -135,15 +135,15 @@ elif [ -f /etc/debian_version ]; then
 fi
 
 if [ "$OS" = "" ]; then
-  echo "OS not supported"
-  exit 1
+  echo "OS not supported" 1>&2
+  exit 1 
 fi
 
 # File systems	ext3, ext4, XFS, BTRFS (conditions applicable as per this table)
 #
 mount | grep "^/"  | grep -vEw 'ext3|ext4|xfs|brtfs' >/dev/null
 if [ $? -eq 0 ]; then
-  echo "FS not supported"
+  echo "FS not supported" 1>&2
   exit 1
 fi
 
@@ -163,7 +163,7 @@ fi
 STRIPES4ROOT=""
 STRIPES4ROOT=$(lsblk -oMOUNTPOINT,PKNAME,KNAME -P | grep 'MOUNTPOINT="/"' | sort  | uniq -c | wc -l)
 if [ $STRIPES4ROOT -gt 1 ]; then
-  echo "Root Filesystem is in more than one dev configuration not supported"
+  echo "Root Filesystem is in more than one dev configuration not supported" 1>&2
   exit 1
 fi
 
@@ -175,7 +175,7 @@ BOOTDISK=$(lsblk -oMOUNTPOINT,PKNAME -P | grep 'MOUNTPOINT="/boot"' | cut -d '"'
 # A machine without a boot disk can't be replicated.
 #
 if [ "$BOOTDISK" = "" ]; then
-  echo "Boot fs is not present. Configuration not supported"
+  echo "Boot fs is not present. Configuration not supported" 1>&2
   exit 1
 fi
 # Boot disks mustn't be in GPT partition format. 
@@ -184,7 +184,7 @@ for i in $BOOTDISK
 do
   fdisk -l /dev/${i} | grep -i gpt
   if [ $? -eq 0 ]; then
-    echo "Boot disk is gpt. Configuration not supported"
+    echo "Boot disk is gpt. Configuration not supported" 1>&2
     exit 1
   fi
 done
@@ -193,7 +193,7 @@ done
 STRIPES4BOOT=""
 STRIPES4BOOT=$(lsblk -oMOUNTPOINT,PKNAME,KNAME -P | grep 'MOUNTPOINT="/boot"' | sort  | uniq -c | wc -l)
 if [ $STRIPES4BOOT -gt 1 ]; then
-  echo "boot Filesystem is in more than one dev configuration not supported"
+  echo "boot Filesystem is in more than one dev configuration not supported" 1>&2
   exit 1
 fi
 
@@ -201,12 +201,12 @@ fi
 #
 df -k / | awk '/^\// {if ($4 < 2097152) exit 1; }' > /dev/null
 if [ $? -ne 0 ]; then
-  echo "Space on / insufficient. Configuration not supported"
+  echo "Space on / insufficient. Configuration not supported" 1>&2
   exit 1
 fi
 
 df -k /usr | awk '/^\// {if ($4 < 2097152) exit 1; }' > /dev/null
 if [ $? -ne 0 ]; then
-  echo "Space on /usr insufficient. Configuration not supported"
+  echo "Space on /usr insufficient. Configuration not supported" 1>&2
   exit 1
 fi
