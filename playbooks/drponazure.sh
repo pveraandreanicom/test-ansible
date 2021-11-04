@@ -152,7 +152,7 @@ fi
 # Thick provision - Yes
 # Thin provision - No
 NODUPLVS=""
-NOSUPLVS=$(lvs --noheadings -o lv_name,lv_attr | grep V.....t... | tr -s ' ' | cut -d ' ' -f 2 | tr '\n' ' ')
+NODUPLVS=$(lvs --noheadings -o lv_name,lv_attr | grep V.....t... | tr -s ' ' | cut -d ' ' -f 2 | tr '\n' ' ')
 if [ "$NOSUPLVS" != "" ]; then
   echo "[ $NOSUPLVS ]: volumes not supported"
 fi
