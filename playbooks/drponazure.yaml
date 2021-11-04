@@ -8,4 +8,4 @@
     copy: src=drponazure.sh dest=/tmp mode=0555
 
   - name: Execute
-    command: bash /tmp/drponazure.sh
+    command: sh /tmp/drponazure.sh
