@@ -1,8 +1,8 @@
 ---
-- name: test_drp_able_4_azure
+- name: test-drp-able-4-azure
   tasks:
     - name: Transfer script
-      copy: src=test_drp_able_4_azure.sh dest=/tmp mode=0555
+      copy: src=test-drp-able-4-azure.sh dest=/tmp mode=0555
 
     - name: Execute
-      command: bash /tmp/test_drp_able_4_azure.sh
+      command: bash /tmp/test-drp-able-4-azure.sh
