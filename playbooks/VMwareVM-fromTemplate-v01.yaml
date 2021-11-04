@@ -1,0 +1,41 @@
+---
+- name: VMwareVM-fromTemplate
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+
+    - name: Create a virtual machine from a template
+      vmware_guest:
+        hostname: "{{ vcsa_hostname }}"
+        username: "{{ vcsa_username }}"
+        esxi_hostname: "{{ esxi_hostname }}"
+        password: "{{ pwd }}"
+        datacenter: DCGLA-DESA-TEST
+        validate_certs: no
+        folder: "{{ vcsa_folder }}"
+        name: "{{ host_hostname }}"
+        state: poweredon
+        template: "RHEL8-Template"
+        disk:
+        - size_gb: "{{ host_disk_size }}"
+          type: "{{ host_disk_type }}"
+          datastore: "{{ esxi_datastore }}"
+
+## Customise this portion if you want unique hardware configuration - default is small
+        hardware:
+          memory_mb: "{{ host_memory }}"
+          num_cpus: "{{ host_cpus }}"
+          num_cpu_cores_per_socket: "{{ host_cores }}"
+          scsi: paravirtual
+          memory_reservation_lock: False
+          mem_reservation: 0
+          hotadd_cpu: True
+          hotremove_cpu: True
+          hotadd_memory: True
+          version: 18 # Hardware version of virtual machine
+        networks:
+        - name: "{{ host_network }}"
+        wait_for_ip_address: no
+      delegate_to: localhost
+      register: deploy
