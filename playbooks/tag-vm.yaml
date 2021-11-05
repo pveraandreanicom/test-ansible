@@ -5,7 +5,7 @@
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     tag_names:
-      - linux
+      - os:linux
     object_name: AODCSRV01-TEST
     object_type: VirtualMachine
     state: add
