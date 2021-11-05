@@ -5,10 +5,7 @@
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
     tag_names:
-      - '{{ t1 }}'
-      - '{{ t2 }}'
-      - '{{ t3 }}'
-      - '{{ t4 }}'
+      - linux
     object_type: VirtualMachine
     state: add
   delegate_to: localhost
