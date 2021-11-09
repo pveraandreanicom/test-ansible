@@ -1,5 +1,5 @@
 ---
-- hosts: manager
+- hosts: all
   tasks:
   - name: Get NTP server configuration
     shell: test -f /etc/ntp1.conf && grep server /etc/ntp.conf || test -f /etc/chrony.conf && grep server /etc/chrony.conf
