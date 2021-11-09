@@ -7,6 +7,7 @@
     debug:
       msg: "chronyd is {{ ansible_facts.services['chronyd.service']['status'] }}"
     when: "'chronyd.service' in ansible_facts.services"
+
   - name print_ntpd
     debug:
       msg: "ntpd is {{ ansible_facts.services['chronyd.service']['status'] }}"
