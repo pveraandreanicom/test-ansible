@@ -182,7 +182,7 @@ fi
 #
 for i in $BOOTDISK
 do
-  fdisk -l /dev/${i} | grep -i gpt
+  fdisk -l /dev/${i} | grep -qi gpt
   if [ $? -eq 0 ]; then
     echo "Boot disk is gpt. Configuration not supported" 1>&2
     error="error"
