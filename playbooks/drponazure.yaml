@@ -1,7 +1,9 @@
 ---
 - name: Viabilidad de DRP en Azure
   hosts: all
-
+  ignore_errors: yes
+  meta: clear_host_errors
+  failed_when: diff_cmd.rc == 0
   tasks:
 
   - name: Copiar Script
