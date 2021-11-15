@@ -9,6 +9,4 @@
 
   - name: Execute
     command: sh /tmp/drponazure.sh
-    ignore_errors: yes
-    register: drponazure
-    failed_when: drponazure.rc == 0
+
