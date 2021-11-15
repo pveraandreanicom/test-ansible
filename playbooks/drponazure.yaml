@@ -10,4 +10,5 @@
   - name: Execute
     command: sh /tmp/drponazure.sh
     ignore_errors: yes
-    failed_when: diff_cmd.rc == 0
+    register drponazure
+    failed_when: drponazure.rc == 0
