@@ -18,6 +18,12 @@
      backup: yes
     when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS' and ansible_distribution_version > 7
 
+  - name: make sure chronyd is installed Debian base
+    apt:
+     name: chrony
+     state: present
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' and ansible_distribution_version > 16 or ansible_distribution_version > 10
+
   - name: deploy chrony.conf template on Debian base
     template:
      src: chrony.conf.j2
