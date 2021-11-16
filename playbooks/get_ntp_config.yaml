@@ -17,7 +17,8 @@
       loop: "{{ package_names }}"
       register: package_check
       when: ansible_facts['os_family'] == "RedHat"
+
     - name: "Print execution results"
       debug:
-        msg: "Package item is installed"
+        msg: "Package {{ item }} is installed"
       when: package_check is succeeded
