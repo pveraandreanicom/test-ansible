@@ -18,8 +18,18 @@
      backup: yes
     when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS' and ansible_distribution_version > 7
 
+  - name: deploy chrony.conf template on Debian base
+    template:
+     src: chrony.conf.j2
+     dest: /etc/chrony/chrony.conf
+     owner: root
+     group: root
+     mode: 0644
+     backup: yes
+    when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian' and ansible_distribution_version > 16 or ansible_distribution_version > 10
+
   - name: Restart chronyd
     service:
       name: chronyd
       state: restarted
-    when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS' and ansible_distribution_version > 7
+#    when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS' and ansible_distribution_version > 7

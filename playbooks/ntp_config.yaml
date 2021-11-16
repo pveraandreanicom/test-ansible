@@ -1,5 +1,0 @@
----
-- hosts: all
-  tasks:
-  - name: Get NTP server configuration
-    shell: test -f /etc/ntp1.conf && egrep 'server|pool' /etc/ntp.conf || test -f /etc/chrony.conf && egrep 'server|pool' /etc/chrony.conf
