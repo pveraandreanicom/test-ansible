@@ -6,7 +6,7 @@
      name: chrony
      state: latest
      update_cache: yes
-    when: {{ ansible_distribution }} == "RedHat" or {{ ansible_distribution }} == "CentOs" and {{ ansible_distribution_version }} > 7
+    when: {{ ansible_distribution }} == 'RedHat' or {{ ansible_distribution }} == 'CentOs' and {{ ansible_distribution_version }} > 7
   - name: deploy chrony.conf template
     template:
      src: /some/full/path/chrony.conf.j2
@@ -15,10 +15,10 @@
      group: root
      mode: 0644
      backup: yes
-    when: {{ ansible_distribution }} == "RedHat" or {{ ansible_distribution }} == "CentOs" and {{ ansible_distribution_version }} > 7
+    when: {{ ansible_distribution }} == 'RedHat' or {{ ansible_distribution }} == 'CentOs' and {{ ansible_distribution_version }} > 7
 
   - name: Restart chronyd
     service:
       name: chronyd
       state: restarted
-    when: {{ ansible_distribution }} == "RedHat" or {{ ansible_distribution }} == "CentOs" and {{ ansible_distribution_version }} > 7
+    when: {{ ansible_distribution }} == 'RedHat' or {{ ansible_distribution }} == 'CentOs' and {{ ansible_distribution_version }} > 7
