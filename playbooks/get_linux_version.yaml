@@ -5,7 +5,4 @@
   tasks:
   - debug:
       msg:
-      - "ansible_distribution {{ hostvars[inventory_hostname].ansible_distribution }}{{ hostvars[inventory_hostname].ansible_distribution_major_version }}{{ hostvars[inventory_hostname].ansible_distribution_version }}"
-      - "major version {{ hostvars[inventory_hostname].ansible_distribution_major_version }}"
-      - "version {{ hostvars[inventory_hostname].ansible_distribution_version }}"
-
+      - "host {{ hostvars[inventory_hostname].ansible_distribution }}{{ hostvars[inventory_hostname].ansible_distribution_version }}"
