@@ -9,7 +9,7 @@
     when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS' and ansible_distribution_version > 7
   - name: deploy chrony.conf template
     template:
-     src: /some/full/path/chrony.conf.j2
+     src: chrony.conf.j2
      dest: /etc/chrony.conf
      owner: root
      group: root
