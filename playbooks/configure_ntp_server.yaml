@@ -36,6 +36,6 @@
 
   - name: Restart chronyd
     service:
-      name: chronyd
+      name: chrony
       state: restarted
 #    when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS' and ansible_distribution_version > 7
