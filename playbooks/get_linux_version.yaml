@@ -5,4 +5,4 @@
   tasks:
   - debug:
       msg:
-      - "VM {{ inventory_hostname }} {{ hostvars[inventory_hostname].ansible_distribution }}{{ hostvars[inventory_hostname].ansible_distribution_version }}"
+      - "VM Get-VM {{ inventory_hostname }} | New-TagAssignment -Tag {{ hostvars[inventory_hostname].ansible_distribution }}{{ hostvars[inventory_hostname].ansible_distribution_version }}"
