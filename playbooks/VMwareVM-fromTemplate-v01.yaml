@@ -7,35 +7,42 @@
 
     - name: Create a virtual machine from a template
       vmware_guest:
-        hostname: "{{ vcsa_hostname }}"
+#        hostname: "{{ vcsa_hostname }}"
+        hostname: "vcenter-gla.andreani.com.ar"
         username: "{{ vcsa_username }}"
-        esxi_hostname: "{{ esxi_hostname }}"
+#        esxi_hostname: "{{ esxi_hostname }}"
         password: "{{ pwd }}"
         datacenter: DCGLA-DESA-TEST
         validate_certs: no
-        folder: "{{ vcsa_folder }}"
-        name: "{{ host_hostname }}"
+#        folder: "{{ vcsa_folder }}"
+        folder: "/DCGLA-DESA-TEST/Infra Linux - DESA"
+        datacenter: "DCGLA-DESA-TEST"
+        name: "{{ new_vmname }}"
         state: poweredon
-        template: "RHEL8-Template"
+        template: "rhel8-podman-final-desa-template"
+        cluster: "CL-GLA-DESA-TEST"
         disk:
         - size_gb: "{{ host_disk_size }}"
-          type: "{{ host_disk_type }}"
-          datastore: "{{ esxi_datastore }}"
+#          type: "{{ host_disk_type }}"
+          type: "eagerzeroedthick"
+#          datastore: "{{ esxi_datastore }}"
+          datastore: "SC-Datastore-05"
 
 ## Customise this portion if you want unique hardware configuration - default is small
         hardware:
           memory_mb: "{{ host_memory }}"
           num_cpus: "{{ host_cpus }}"
-          num_cpu_cores_per_socket: "{{ host_cores }}"
+#          num_cpu_cores_per_socket: "{{ host_cores }}"
+          num_cpu_cores_per_socket: "1"
           scsi: paravirtual
           memory_reservation_lock: False
           mem_reservation: 0
-          hotadd_cpu: True
-          hotremove_cpu: True
+          hotadd_cpu: False
+          hotremove_cpu: False
           hotadd_memory: True
           version: 18 # Hardware version of virtual machine
-        networks:
-        - name: "{{ host_network }}"
+#        networks:
+#        - name: "{{ host_network }}"
         wait_for_ip_address: no
       delegate_to: localhost
       register: deploy
