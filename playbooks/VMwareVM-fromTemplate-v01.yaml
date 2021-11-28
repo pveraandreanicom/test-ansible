@@ -1,7 +1,6 @@
 ---
 - name: VMwareVM-fromTemplate
   hosts: localhost
-  connection: local
   gather_facts: no
   tasks:
   - name: Create a virtual machine from a template
@@ -11,7 +10,6 @@
       username: "{{ vcsa_username }}"
 #     esxi_hostname: "{{ esxi_hostname }}"
       password: "{{ pwd }}"
-      datacenter: DCGLA-DESA-TEST
       validate_certs: no
 #     folder: "{{ vcsa_folder }}"
       folder: "/DCGLA-DESA-TEST/Infra Linux - DESA"
