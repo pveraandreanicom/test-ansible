@@ -1,6 +1,7 @@
 ---
 - name: VMwareVM-fromTemplate
   hosts: localhost
+  connection: local
   gather_facts: no
   tasks:
   - name: Create a virtual machine from a template
