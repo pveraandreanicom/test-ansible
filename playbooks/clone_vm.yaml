@@ -13,7 +13,7 @@
       name: "{{ new_vmname }}"
       template: rhel8-podman-final-desa-template
       datacenter: DCGLA-DESA-TEST
-#      folder: "/DCGLA-DESA-TEST/Infra Linux - DESA"
+      folder: "/DCGLA-DESA-TEST/"
       cluster: CL-GLA-DESA-TEST
       state: poweredon
       wait_for_ip_address: no
