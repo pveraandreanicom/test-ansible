@@ -22,7 +22,7 @@
         type: "eagerzeroedthick"
         datastore: "SC-Datastore-05"
       hardware:
-        memory_mb: "{{ host_memory }}"
+        memory_gb: "{{ host_memory }}"
         num_cpus: "{{ host_cpus }}"
 #        num_cpu_cores_per_socket: "1"
 #        scsi: paravirtual
