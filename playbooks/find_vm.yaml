@@ -6,7 +6,7 @@
       hostname: '{{ vcsa_hostname }}'
       username: '{{ vcsa_username }}'
       password: '{{ vcsa_password }}'
-#     folder: "/datacenter/vm/folder"
+    folder: "/datacenter/vm/folder"
     delegate_to: localhost
     register: vm_info
 
