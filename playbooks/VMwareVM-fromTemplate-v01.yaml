@@ -24,13 +24,13 @@
       hardware:
         memory_mb: "{{ host_memory }}"
         num_cpus: "{{ host_cpus }}"
-        num_cpu_cores_per_socket: "1"
-        scsi: paravirtual
+#        num_cpu_cores_per_socket: "1"
+#        scsi: paravirtual
 #        memory_reservation_lock: False
 #        mem_reservation: 0
-        hotadd_cpu: False
-        hotremove_cpu: False
-        hotadd_memory: True
-        version: 18 # Hardware version of virtual machine
+#        hotadd_cpu: False
+#        hotremove_cpu: False
+#        hotadd_memory: True
+#        version: 18 # Hardware version of virtual machine
     delegate_to: localhost
     register: deploy
