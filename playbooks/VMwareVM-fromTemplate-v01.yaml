@@ -8,7 +8,7 @@
     vmware_guest:
       hostname: "vcenter-gla.andreani.com.ar"
       username: "{{ vcsa_username }}"
-      password: "{{ pwd }}"
+      password: "{{ vcsa_password}}"
       validate_certs: no
       name: "{{ new_vmname }}"
       template: "rhel8-podman-final-desa-template"
@@ -18,11 +18,11 @@
       state: poweredon
       wait_for_ip_address: no
       disk:
-      - size_gb: "{{ host_disk_size }}"
+      - size_gb: "{{ vm_disk_size }}"
         type: "eagerzeroedthick"
-        datastore: "SC-Datastore-05"
+        datastore: "{{ vm_datastore }}"
       hardware:
-        memory_mb: "{{ host_memory }}"
+        memory_mb: "{{ host_memory *1024|int }}"
         num_cpus: "{{ host_cpus }}"
 #        num_cpu_cores_per_socket: "1"
         scsi: paravirtual
@@ -33,10 +33,10 @@
         hotadd_memory: True
 #        version: 18 # Hardware version of virtual machine
       networks:
-      - name: Desa
-        ip: 10.20.24.67
-        netmask: 255.255.254.0
-        gateway: 10.20.24.1
+      - name: {{ vm_network }}
+        ip: {{ vm_ip }}
+        netmask: {{ vm_netmask }}
+        gateway: {{ vm_gateway }}
       
     delegate_to: localhost
     register: deploy
