@@ -2,7 +2,7 @@
 - hosts: all
   vars:
     package_names:
-      - {{ paquete }}
+      - "{{ paquete }}"
   tasks:
     - name: "Check if listed package is installed or not on Debian Linux family"
       command: dpkg-query -l "{{ item }}"
