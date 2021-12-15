@@ -1,0 +1,15 @@
+- hosts: localhost
+  roles:
+    - role: diodonfrost.logrotate
+      vars:
+        logrotate_entries:
+          - name: nginx
+            paths:
+              - /var/log/nginx/*.log
+            options:
+              - daily
+              - missingok
+              - compress
+              - sharedscripts
+              - rotate 4
+              - size 100M
