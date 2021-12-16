@@ -1,4 +1,9 @@
 - hosts: localhost
+  pre_tasks:
+  - name: Gather the package facts
+    ansible.builtin.package_facts:
+        manager: auto
+
   roles:
     - role: diodonfrost.logrotate
       vars:
@@ -7,9 +12,17 @@
             paths:
               - /var/log/nginx/*.log
             options:
-              - daily
-              - missingok
+              - weekly
               - compress
-              - sharedscripts
+          - name: rsyslog
+            paths:
+              - /var/log/kern.log
+              - /var/log/message
+              - /var/log/debug
+            options:
+              - weekly
               - rotate 4
+              - compress
               - size 100M
+      when: "'nginx' in ansible_facts.packages"
+
