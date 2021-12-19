@@ -22,8 +22,8 @@
         type: "eagerzeroedthick"
         datastore: "{{ vm_datastore }}"
       hardware:
-        memory_mb: "{{ host_memory *1024|int }}"
-        num_cpus: "{{ host_cpus }}"
+        memory_mb: "{{ vm_memory *1024|int }}"
+        num_cpus: "{{ vm_cpus }}"
 #        num_cpu_cores_per_socket: "1"
         scsi: paravirtual
 #        memory_reservation_lock: False
