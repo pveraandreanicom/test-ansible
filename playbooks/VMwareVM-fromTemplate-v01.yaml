@@ -8,7 +8,7 @@
     vmware_guest:
       hostname: "vcenter-gla.andreani.com.ar"
       username: "{{ vcsa_username }}"
-      password: "{{ vcsa_password}}"
+      password: "{{ vcsa_password }}"
       validate_certs: no
       name: "{{ new_vmname }}"
       template: "rhel8-podman-final-desa-template"
