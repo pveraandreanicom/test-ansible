@@ -1,0 +1,52 @@
+- name: Add repository
+  yum_repository:
+    name: rhel-8-for-x86_64-baseos-rpms
+    description: Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
+    baseurl: https://cdn.redhat.com/content/dist/rhel8/$releasever/x86_64/baseos/os
+    enabled: yes
+    gpgcheck = 1
+    gpgkey = file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+    sslverify = 1
+    sslcacert = /etc/rhsm/ca/redhat-uep.pem
+    sslclientkey = /etc/pki/entitlement/8315695045436431682-key.pem
+    sslclientcert = /etc/pki/entitlement/8315695045436431682.pem
+    metadata_expire = 86400
+    enabled_metadata = 1
+
+
+- name: Add multiple repositories into the same file (1/2)
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    file: external_repos
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+    gpgcheck: no
+
+- name: Add multiple repositories into the same file (2/2)
+  yum_repository:
+    name: rpmforge
+    description: RPMforge YUM repo
+    file: external_repos
+    baseurl: http://apt.sw.be/redhat/el7/en/$basearch/rpmforge
+    mirrorlist: http://mirrorlist.repoforge.org/el7/mirrors-rpmforge
+    enabled: no
+
+# Handler showing how to clean yum metadata cache
+- name: yum-clean-metadata
+  command: yum clean metadata
+  args:
+    warn: no
+
+# Example removing a repository and cleaning up metadata cache
+- name: Remove repository (and clean up left-over metadata)
+  yum_repository:
+    name: epel
+    state: absent
+  notify: yum-clean-metadata
+
+- name: Remove repository from a specific repo file
+  yum_repository:
+    name: epel
+    file: external_repos
+    state: absent
+

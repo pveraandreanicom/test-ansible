@@ -33,10 +33,10 @@
         hotadd_memory: True
 #        version: 18 # Hardware version of virtual machine
       networks:
-      - name: {{ vm_network }}
-        ip: {{ vm_ip }}
-        netmask: {{ vm_netmask }}
-        gateway: {{ vm_gateway }}
+      - name: "{{ vm_network }}"
+        ip: "{{ vm_ip }}"
+        netmask: "{{ vm_netmask }}"
+        gateway: "{{ vm_gateway }}"
       
     delegate_to: localhost
     register: deploy
