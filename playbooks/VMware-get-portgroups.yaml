@@ -1,4 +1,7 @@
 - name: Gather portgroup info about all ESXi Host in given Cluster
+  hosts: localhost
+  connection: local
+  gather_facts: no
   community.vmware.vmware_portgroup_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
