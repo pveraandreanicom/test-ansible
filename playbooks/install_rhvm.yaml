@@ -63,16 +63,16 @@
     - name: "Disable all repositories"
       command: "/usr/bin/subscription-manager repos --disable=*"
       when:
-        - not registered
+#        - not registered
         - rhsm_repos is defined
-#        - rhsm_repos is not none
-#        - rhsm_repos|trim != ''
+        - rhsm_repos is not none
+        - rhsm_repos|trim != ''
 
     - name: "Enable specified repositories"
       command: "/usr/bin/subscription-manager repos --enable={{ item }}"
       with_items: "{{ rhsm_repos }}"
       when:
-        - not registered
+#        - not registered
         - rhsm_repos is defined
         - rhsm_repos is not none
         - rhsm_repos|trim != ''
