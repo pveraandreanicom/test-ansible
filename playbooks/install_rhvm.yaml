@@ -287,7 +287,7 @@
         state: absent
     
     - name: Register RHEL
-      community.general.redhat_subscription:
+      redhat_subscription:      
         state: present
         username: ddf4-90a6-de5f-b290
         password: rhel4ndr34n1#
