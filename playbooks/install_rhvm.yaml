@@ -1,3 +1,22 @@
+# Example removing a repository and cleaning up metadata cache
+#- name: Remove repository (and clean up left-over metadata)
+#  yum_repository:
+#    name: *
+#    state: absent
+#  notify: yum-clean-metadata
+
+- name: Disable all repos
+  action: 
+    disablerepo=*
+    state=present
+
+- name: Same as above but subscribe to a specific pool by ID.
+  community.general.redhat_subscription:
+    state: present
+    username: ddf4-90a6-de5f-b290
+    password: rhel4ndr34n1#
+    pool_ids: 8a85f9997527b04201752908e64d6a5d
+
 - name: Add repository
   yum_repository:
     name: rhel-8-for-x86_64-baseos-rpms
@@ -16,20 +35,63 @@
 
 - name: Add multiple repositories into the same file (1/2)
   yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    file: external_repos
-    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
-    gpgcheck: no
+    name: rhel-8-for-x86_64-appstream-rpms
+    description: Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
+    baseurl: https://cdn.redhat.com/content/dist/rhel8/$releasever/x86_64/appstream/os
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+    sslverify: 1
+    sslcacert: /etc/rhsm/ca/redhat-uep.pem
+    sslclientkey: /etc/pki/entitlement/8315695045436431682-key.pem
+    sslclientcert: /etc/pki/entitlement/8315695045436431682.pem
+    metadata_expire: 86400
+    enabled_metadata: 1
 
 - name: Add multiple repositories into the same file (2/2)
   yum_repository:
-    name: rpmforge
-    description: RPMforge YUM repo
-    file: external_repos
-    baseurl: http://apt.sw.be/redhat/el7/en/$basearch/rpmforge
-    mirrorlist: http://mirrorlist.repoforge.org/el7/mirrors-rpmforge
-    enabled: no
+    name: rhv-4.4-manager-for-rhel-8-x86_64-rpms
+    description: Red Hat Virtualization Manager 4.4 for RHEL 8 x86_64 (RPMs)
+    baseurl: https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/rhv-manager/4.4/os
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+    sslverify: 1
+    sslcacert: /etc/rhsm/ca/redhat-uep.pem
+    sslclientkey: /etc/pki/entitlement/8315695045436431682-key.pem
+    sslclientcert: /etc/pki/entitlement/8315695045436431682.pem
+    metadata_expire: 86400
+    enabled_metadata: 1
+
+- name: fast
+  yum_repository:
+    name: fast-datapath-for-rhel-8-x86_64-rpms
+    description: Fast Datapath for RHEL 8 x86_64 (RPMs)
+    baseurl: https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/fast-datapath/os
+    enabled: 1
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+    sslverify: 1
+    sslcacert: /etc/rhsm/ca/redhat-uep.pem
+    sslclientkey: /etc/pki/entitlement/8315695045436431682-key.pem
+    sslclientcert: /etc/pki/entitlement/8315695045436431682.pem
+    metadata_expire: 86400
+    enabled_metadata: 1
+
+- name: jb
+  yum_repository:
+    name: jb-eap-7.2-for-rhel-8-x86_64-source-rpms
+    description: JBoss Enterprise Application Platform 7.2 (RHEL 8) (Source RPMs)
+    baseurl: https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/jbeap/7.2/source/SRPMS
+    enabled: 0
+    gpgcheck: 1
+    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
+    sslverify: 1
+    sslcacert: /etc/rhsm/ca/redhat-uep.pem
+    sslclientkey: /etc/pki/entitlement/8315695045436431682-key.pem
+    sslclientcert: /etc/pki/entitlement/8315695045436431682.pem
+    metadata_expire: 86400
+    enabled_metadata: 0
 
 # Handler showing how to clean yum metadata cache
 - name: yum-clean-metadata
@@ -37,16 +99,22 @@
   args:
     warn: no
 
-# Example removing a repository and cleaning up metadata cache
-- name: Remove repository (and clean up left-over metadata)
-  yum_repository:
-    name: epel
-    state: absent
-  notify: yum-clean-metadata
+- name: Enable postgresql 12
+  command: dnf module -y enable postgresql:12
 
-- name: Remove repository from a specific repo file
-  yum_repository:
-    name: epel
-    file: external_repos
-    state: absent
+- name: Enable pki-deps
+  command: dnf module -y enable pki-deps
 
+- name: Distro Sync
+  command: dnf distro-sync --nobest
+
+- name: Install a list of packages 
+  yum:
+    name:
+      - postgresql-contrib
+      - rhvm 
+      - ovirt-engine-extension-aaa-ldap-setup
+    state: present
+
+- name: Run engine-setup
+  command: engine-setup --accept-defaults
