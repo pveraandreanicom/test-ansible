@@ -292,8 +292,6 @@
         username: ddf4-90a6-de5f-b290
         password: rhel4ndr34n1#
         pool_ids: 8a85f9997527b04201752908e64d6a5d
-        ignore_errors: yes
-
         
     - name: Add repository
       yum_repository:
