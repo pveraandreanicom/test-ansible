@@ -7,8 +7,14 @@
       - rhv-4.4-manager-for-rhel-8-x86_64-rpms
       - fast-datapath-for-rhel-8-x86_64-rpms
       - jb-eap-7.3-for-rhel-8-x86_64-rpms
+
+    paquetes:
+      - postgresql-contrib
+      - rhvm 
+      - ovirt-engine-extension-aaa-ldap-setup
  
     rhsm_pool: 8a85f9997527b04201752908e64d6a5d
+
   tasks:
 
     - name: "Initializing registration status"
@@ -89,31 +95,39 @@
   
   ## Handler showing how to clean yum metadata cache
     - name: yum-clean-metadata
-      command: yum clean metadata
+      command: "/usr/bin/yum clean metadata"
       args:
         warn: no
   #   
     - name: Enable postgresql 12
-      command: dnf module -y enable postgresql:12
+      command: "/usr/bin/dnf module -y enable postgresql:12"
       register: enable_postgresql
 
    
     - name: Enable pki-deps
-      command: dnf module -y enable pki-deps
+      command: "/usr/bin/dnf module -y enable pki-deps"
       register: enable_pki_deps
    
     - name: Distro Sync
-      command: dnf distro-sync --nobest
+      command: "dnf distro-sync --nobest"
       register: distro_sync_nobest
    
+#    - name: Install a list of packages 
+#      yum:
+#        name:
+#          - postgresql-contrib
+#          - rhvm 
+#          - ovirt-engine-extension-aaa-ldap-setup
+#        state: present
+
     - name: Install a list of packages 
       yum:
-        name:
-          - postgresql-contrib
-          - rhvm 
-          - ovirt-engine-extension-aaa-ldap-setup
+        with_idems: "{{ paquetes }}"
+        when:
+          - paquetes is defined
         state: present
+
   #  
     - name: Run engine-setup
-      command: engine-setup --accept-defaults
+      command: "engine-setup --accept-defaults"
       register: engine_setup
