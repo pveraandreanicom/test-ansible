@@ -1,7 +1,8 @@
 ---
 - hosts: all
   vars:
-    rmsh_repos: rhel-8-for-x86_64-baseos-rpms,rhel-8-for-x86_64-appstream-rpms,rhv-4.4-manager-for-rhel-8-x86_64-rpms,fast-datapath-for-rhel-8-x86_64-rpms,jb-eap-7.3-for-rhel-8-x86_64-rpm 
+    rhsm_repos: rhel-8-for-x86_64-baseos-rpms,rhel-8-for-x86_64-appstream-rpms,rhv-4.4-manager-for-rhel-8-x86_64-rpms,fast-datapath-for-rhel-8-x86_64-rpms,jb-eap-7.3-for-rhel-8-x86_64-rpm 
+    rhsm_pool: 8a85f9997527b04201752908e64d6a5d
   tasks:
 
     - name: "Initializing registration status"
@@ -34,23 +35,8 @@
         state: present
         username: ddf4-90a6-de5f-b290
         password: rhel4ndr34n1#
-        pool_ids: 8a85f9997527b04201752908e64d6a5d
+        pool_ids: {{ rhsm_pool }}
         force_register: yes
-
-    - name: "Register using username, password and organization"
-      command: "/usr/bin/subscription-manager register --username=ddf4-90a6-de5f-b290 --password=rhel4ndr34n1#"
-      no_log: true
-      when:
-        - not registered
-        - rhsm_authentication == "password"
-        - rhsm_org is defined
-        - rhsm_org is not none
-        - rhsm_org|trim != ''
-      register: register_userpworg_result
-      until: register_userpworg_result.rc == 0
-      retries: 10
-      delay: 1
-
 
     - name: "Auto-attach to Subscription Manager Pool"
       command: "/usr/bin/subscription-manager attach --auto"
@@ -62,17 +48,17 @@
       retries: 10
       delay: 1
     
-    - name: "Attach to a specific pool"
-      command: "/usr/bin/subscription-manager attach --pool={{ rhsm_pool }}"
-      when:
-        - rhsm_pool is defined
-        - rhsm_pool is not none
-        - rhsm_pool|trim != ''
-        - not registered
-      register: attachpool_result
-      until: attachpool_result.rc == 0
-      retries: 10
-      delay: 1
+    #- name: "Attach to a specific pool"
+    #  command: "/usr/bin/subscription-manager attach --pool={{ rhsm_pool }}"
+    #  when:
+    #    - rhsm_pool is defined
+    #    - rhsm_pool is not none
+    #    - rhsm_pool|trim != ''
+    #    - not registered
+    #  register: attachpool_result
+    #  until: attachpool_result.rc == 0
+    #  retries: 10
+    #  delay: 1
         
     - name: "Disable all repositories"
       command: "/usr/bin/subscription-manager repos --disable=*"
