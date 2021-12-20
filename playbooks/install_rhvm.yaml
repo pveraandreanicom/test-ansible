@@ -86,104 +86,29 @@
       until: enablerepos_result.rc == 0
       retries: 10
       delay: 1
-    #- name: Add repository
-    #  yum_repository:
-    #    name: rhel-8-for-x86_64-baseos-rpms
-    #    description: Red Hat Enterprise Linux 8 for x86_64 - BaseOS (RPMs)
-    #    baseurl: https://cdn.redhat.com/content/dist/rhel8/$releasever/x86_64/baseos/os
-    #    enabled: 1
-    #    gpgcheck: 1
-    #    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
-    #    sslverify: 1
-    #    sslcacert: /etc/rhsm/ca/redhat-uep.pem
-    #    sslclientkey: /etc/pki/entitlement/8315695045436431682-key.pem
-    #    sslclientcert: /etc/pki/entitlement/8315695045436431682.pem
-    #    metadata_expire: 86400
-    #    enabled_metadata: 1
   
-  #
-  #- name: Add multiple repositories into the same file (1/2)
-  #  yum_repository:
-  #    name: rhel-8-for-x86_64-appstream-rpms
-  #    description: Red Hat Enterprise Linux 8 for x86_64 - AppStream (RPMs)
-  #    baseurl: https://cdn.redhat.com/content/dist/rhel8/$releasever/x86_64/appstream/os
-  #    enabled: 1
-  #    gpgcheck: 1
-  #    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
-  #    sslverify: 1
-  #    sslcacert: /etc/rhsm/ca/redhat-uep.pem
-  #    sslclientkey: /etc/pki/entitlement/8315695045436431682-key.pem
-  #    sslclientcert: /etc/pki/entitlement/8315695045436431682.pem
-  #    metadata_expire: 86400
-  #    enabled_metadata: 1
-  #
-  #- name: Add multiple repositories into the same file (2/2)
-  #  yum_repository:
-  #    name: rhv-4.4-manager-for-rhel-8-x86_64-rpms
-  #    description: Red Hat Virtualization Manager 4.4 for RHEL 8 x86_64 (RPMs)
-  #    baseurl: https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/rhv-manager/4.4/os
-  #    enabled: 1
-  #    gpgcheck: 1
-  #    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
-  #    sslverify: 1
-  #    sslcacert: /etc/rhsm/ca/redhat-uep.pem
-  #    sslclientkey: /etc/pki/entitlement/8315695045436431682-key.pem
-  #    sslclientcert: /etc/pki/entitlement/8315695045436431682.pem
-  #    metadata_expire: 86400
-  #    enabled_metadata: 1
-  #
-  #- name: fast
-  #  yum_repository:
-  #    name: fast-datapath-for-rhel-8-x86_64-rpms
-  #    description: Fast Datapath for RHEL 8 x86_64 (RPMs)
-  #    baseurl: https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/fast-datapath/os
-  #    enabled: 1
-  #    gpgcheck: 1
-  #    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
-  #    sslverify: 1
-  #    sslcacert: /etc/rhsm/ca/redhat-uep.pem
-  #    sslclientkey: /etc/pki/entitlement/8315695045436431682-key.pem
-  #    sslclientcert: /etc/pki/entitlement/8315695045436431682.pem
-  #    metadata_expire: 86400
-  #    enabled_metadata: 1
-  #
-  #- name: jb
-  #  yum_repository:
-  #    name: jb-eap-7.2-for-rhel-8-x86_64-source-rpms
-  #    description: JBoss Enterprise Application Platform 7.2 (RHEL 8) (Source RPMs)
-  #    baseurl: https://cdn.redhat.com/content/dist/layered/rhel8/x86_64/jbeap/7.2/source/SRPMS
-  #    enabled: 0
-  #    gpgcheck: 1
-  #    gpgkey: file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release
-  #    sslverify: 1
-  #    sslcacert: /etc/rhsm/ca/redhat-uep.pem
-  #    sslclientkey: /etc/pki/entitlement/8315695045436431682-key.pem
-  #    sslclientcert: /etc/pki/entitlement/8315695045436431682.pem
-  #    metadata_expire: 86400
-  #    enabled_metadata: 0
-  #
   ## Handler showing how to clean yum metadata cache
-  #- name: yum-clean-metadata
-  #  command: yum clean metadata
-  #  args:
-  #    warn: no
-  #
-  #- name: Enable postgresql 12
-  #  command: dnf module -y enable postgresql:12
-  #
-  #- name: Enable pki-deps
-  #  command: dnf module -y enable pki-deps
-  #
-  #- name: Distro Sync
-  #  command: dnf distro-sync --nobest
-  #
-  #- name: Install a list of packages 
-  #  yum:
-  #    name:
-  #   - postgresql-contrib
-  #   - rhvm 
-  #   - ovirt-engine-extension-aaa-ldap-setup
-  #    state: present
-  #
-  #- name: Run engine-setup
-  #  command: engine-setup --accept-defaults
+    - name: yum-clean-metadata
+      command: yum clean metadata
+      args:
+        warn: no
+  #   
+    - name: Enable postgresql 12
+      command: dnf module -y enable postgresql:12
+   
+    - name: Enable pki-deps
+      command: dnf module -y enable pki-deps
+   
+    - name: Distro Sync
+      command: dnf distro-sync --nobest
+   
+    - name: Install a list of packages 
+      yum:
+        name:
+        - postgresql-contrib
+        - rhvm 
+        - ovirt-engine-extension-aaa-ldap-setup
+      state: present
+  #  
+    - name: Run engine-setup
+      command: engine-setup --accept-defaults
