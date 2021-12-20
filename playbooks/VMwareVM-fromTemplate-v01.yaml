@@ -37,6 +37,11 @@
         ip: "{{ vm_ip }}"
         netmask: "{{ vm_netmask }}"
         gateway: "{{ vm_gateway }}"
+        dns_servers:
+        - 10.20.2.115
+        - 10.20.2.116
+      customization:
+        dns_suffix: andreani.com.ar
       
     delegate_to: localhost
     register: deploy
