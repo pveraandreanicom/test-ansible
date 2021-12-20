@@ -9,6 +9,11 @@
       - jb-eap-7.3-for-rhel-8-x86_64-rpms
  
     rhsm_pool: 8a85f9997527b04201752908e64d6a5d
+    paquetes:
+      - postgresql-contrib
+      - rhvm
+      - ovirt-engine-extension-aaa-ldap-setup
+
   tasks:
 
     - name: "Initializing registration status"
@@ -100,7 +105,7 @@
    
     - name: Enable pki-deps
       command: dnf module -y enable pki-deps
-      register: enable_pki_deps
+      register: enable_pki-deps
    
     - name: Distro Sync
       command: dnf distro-sync --nobest
@@ -108,10 +113,9 @@
    
     - name: Install a list of packages 
       yum:
-        name:
-          - postgresql-contrib
-          - rhvm 
-          - ovirt-engine-extension-aaa-ldap-setup
+        with_idems: "{{ paquetes }}"
+        when:
+          - paquetes is defined
         state: present
   #  
     - name: Run engine-setup
