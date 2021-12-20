@@ -95,12 +95,16 @@
   #   
     - name: Enable postgresql 12
       command: dnf module -y enable postgresql:12
+      register: enable_postgresql
+
    
     - name: Enable pki-deps
       command: dnf module -y enable pki-deps
+      register: enable_pki-deps
    
     - name: Distro Sync
       command: dnf distro-sync --nobest
+      register: distro_sync_nobest
    
     - name: Install a list of packages 
       yum:
@@ -112,3 +116,4 @@
   #  
     - name: Run engine-setup
       command: engine-setup --accept-defaults
+      register: engine_setup
