@@ -5,10 +5,10 @@
 #    state: absent
 #  notify: yum-clean-metadata
 
-- name: Disable all repos
-  action: 
-    disablerepo=*
-    state=present
+#- name: Disable all repos
+#  action: 
+#    disablerepo=*
+#    state=present
 
 - name: Same as above but subscribe to a specific pool by ID.
   community.general.redhat_subscription:
