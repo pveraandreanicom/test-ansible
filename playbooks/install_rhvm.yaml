@@ -108,9 +108,9 @@
       command: "/usr/bin/dnf module -y enable pki-deps"
       register: enable_pki_deps
    
-    - name: Distro Sync
-      command: "dnf distro-sync --nobest"
-      register: distro_sync_nobest
+#    - name: Distro Sync
+#      command: "dnf distro-sync --nobest"
+#      register: distro_sync_nobest
    
 #    - name: Install a list of packages 
 #      yum:
