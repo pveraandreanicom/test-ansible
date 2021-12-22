@@ -19,6 +19,9 @@
 
   tasks:
 
+    - name: Copiar Script
+      copy: src=rhvm_config.conf dest=/tmp mode=0555
+
     - name: "Initializing registration status"
       set_fact:
         registered: false
@@ -130,5 +133,5 @@
 
   #  
     - name: Run engine-setup
-      command: "engine-setup --accept-defaults"
+      command: "engine-setup --config=/tmp/rhvm_config.conf"
       register: engine_setup
