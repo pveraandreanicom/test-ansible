@@ -35,7 +35,7 @@
       lineinfile:
          path: /etc/hosts
          line: " {{ ansible_ssh_host }} {{ ansible_hostname }}.{{ dominio }} "
-        insertbefore: BOF
+         insertbefore: BOF
 
     - name: "Initializing registration status"
       set_fact:
