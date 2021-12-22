@@ -122,7 +122,7 @@
 
     - name: Install a list of packages 
       yum:
-        with_idems: "{{ paquetes }}"
+        with_items: "{{ paquetes }}"
         when:
           - paquetes is defined
         state: present
