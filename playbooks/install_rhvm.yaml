@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  gather_facts: yes
   vars:
     rhsm_repos: 
       - rhel-8-for-x86_64-baseos-rpms
@@ -19,8 +20,14 @@
 
   tasks:
 
-    - name: Copiar Script
+    - name: Copiar config
       copy: src=rhvm_config.conf dest=/tmp mode=0555
+
+    - replace:
+      dest: /tmp/rhvm_config.conf
+      regexp: RHNAME
+      replace: '{{ ansible_hostname }}'
+      backup: yes
 
     - name: "Initializing registration status"
       set_fact:
@@ -130,7 +137,6 @@
         name: "{{ paquetes }}"
         state: present
         update_cache: no
-
   #  
     - name: Run engine-setup
       command: "engine-setup --config=/tmp/rhvm_config.conf"
