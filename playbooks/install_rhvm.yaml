@@ -17,17 +17,25 @@
       - ovirt-engine-extension-aaa-ldap-setup
  
     rhsm_pool: 8a85f9997527b04201752908e64d6a5d
+    dominio: andreani.com.ar
 
   tasks:
 
     - name: Copiar config
       copy: src=rhvm_config.conf dest=/tmp mode=0555
 
-    - replace:
-      dest: /tmp/rhvm_config.conf
-      regexp: RHNAME
-      replace: '{{ ansible_hostname }}'
-      backup: yes
+    - name: Reemplazar por el hostname
+      replace:
+        dest: /tmp/rhvm_config.conf
+        regexp: HNAME
+        replace: '{{ ansible_hostname }}.{{ dominio }}'
+        backup: yes
+
+    - name: Agregar a la tabla de host
+      lineinfile:
+         path: /etc/hosts
+         line: " {{ ansible_ssh_host }} {{ ansible_hostname }}.{{ dominio }} "
+        insertbefore: BOF
 
     - name: "Initializing registration status"
       set_fact:
