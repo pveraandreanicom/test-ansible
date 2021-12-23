@@ -31,6 +31,13 @@
         replace: '{{ ansible_hostname }}.{{ dominio }}'
         backup: yes
 
+    - name: Reemplazar por el hostname
+      replace:
+        dest: /tmp/rhvm_config.conf
+        regexp: DOMINIO 
+        replace: '{{ dominio }}'
+        backup: yes
+
     - name: Agregar a la tabla de host
       lineinfile:
          path: /etc/hosts
