@@ -149,5 +149,5 @@
     - name: Run engine-setup
       command: "engine-setup --config=/tmp/rhvm_config.conf"
       register: engine_setup
-      async: 60
-      poll: 60
+      async: 120
+      poll: 120
