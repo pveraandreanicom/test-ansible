@@ -159,4 +159,4 @@
       async: 900
       poll: 10
   when:
-    {{ ansible_hostname }} == {{ new_vmname }}
+    "{{ ansible_hostname }}" == "{{ new_vmname }}"
