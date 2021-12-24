@@ -22,5 +22,3 @@
       debug:
         msg: "Package {{ item }} is installed"
       when: package_check is succeeded
-  when:
-    ansible_hostname == "AODCSRV01-DESA"

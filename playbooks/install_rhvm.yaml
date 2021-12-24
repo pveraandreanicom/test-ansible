@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: "{{ new_vmname }}"
   gather_facts: yes
   vars:
     rhsm_repos: 
@@ -158,5 +158,3 @@
       register: engine_setup
       async: 900
       poll: 10
-  when:
-    "{{ ansible_hostname }}" == "{{ new_vmname }}"
