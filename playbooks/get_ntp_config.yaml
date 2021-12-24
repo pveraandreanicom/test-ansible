@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  limit: AODCSRV01-DESA
   vars:
     package_names:
       - chrony
