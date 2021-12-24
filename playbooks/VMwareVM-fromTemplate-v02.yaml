@@ -40,9 +40,12 @@
         dns_servers:
         - 10.20.2.115
         - 10.20.2.116
-        connected: true
+        start_connected: True
       customization:
         dns_suffix: andreani.com.ar
+        dns_servers:
+        - 10.20.2.115
+        - 10.20.2.116
       
     delegate_to: localhost
     register: deploy
