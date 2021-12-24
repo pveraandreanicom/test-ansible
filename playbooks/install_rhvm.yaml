@@ -1,5 +1,5 @@
 ---
-- hosts: {{ new_vmname }}
+- hosts: "{{ new_vmname }}"
   gather_facts: yes
   vars:
     rhsm_repos: 
