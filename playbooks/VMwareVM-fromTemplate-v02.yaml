@@ -36,10 +36,11 @@
       - name: "{{ vm_network }}"
         ip: "{{ vm_ip }}"
         netmask: "{{ vm_netmask }}"
-        gateway: "{{ vm_gateway }}"
+        gateway: {{ vm_ip | regex_replace("\.[0-9]*$",".1" }}
         dns_servers:
         - 10.20.2.115
         - 10.20.2.116
+        connected: true
       customization:
         dns_suffix: andreani.com.ar
       
