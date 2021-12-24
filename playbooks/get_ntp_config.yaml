@@ -1,6 +1,5 @@
 ---
 - hosts: all
-  limit: AODCSRV01-DESA
   vars:
     package_names:
       - chrony
@@ -23,3 +22,5 @@
       debug:
         msg: "Package {{ item }} is installed"
       when: package_check is succeeded
+  when:
+    {{ ansible_hostname }} == "AODCSRV01-DESA"
