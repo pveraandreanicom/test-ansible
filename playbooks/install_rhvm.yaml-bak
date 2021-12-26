@@ -2,7 +2,7 @@
 - hosts: "{{ new_vmname }}"
   gather_facts: yes
   vars:
-    rhsm_add_repo: 
+    rhsm_repos: 
       - rhel-8-for-x86_64-baseos-rpms
       - rhel-8-for-x86_64-appstream-rpms
       - rhv-4.4-manager-for-rhel-8-x86_64-rpms
@@ -11,16 +11,13 @@
       - openstack-16.2-cinderlib-for-rhel-8-x86_64-rpms
       - rhceph-4-tools-for-rhel-8-x86_64-rpms
 
-    rhvm_add_rpms:
+    paquetes:
       - postgresql-contrib
       - rhvm 
       - ovirt-engine-extension-aaa-ldap-setup
  
-    rhvm_dom_gui: "{{ rhvm_dominio | default('andreani.com.ar'}}"
-    rhvm_adm_pass: "{{ rhvm_admin_password | default('admin') }}"
-    rhsm_usr_name: "{{ rhsm_user | default('rhsm_user')}}"
-    rhsm_usr_pass: "{{ rhsm_pass | default('rhsm_pass')}}"
-    rhsm_reg_pool: "{{ rhsm_pool | default('notsetwillfail') }} "
+    rhsm_pool: 8a85f9997527b04201752908e64d6a5d
+    dominio: andreani.com.ar
 
   tasks:
 
@@ -31,27 +28,20 @@
       replace:
         dest: /tmp/rhvm_config.conf
         regexp: HNAME
-        replace: '{{ ansible_hostname }}.{{ rhvm_dom_gui}}'
+        replace: '{{ ansible_hostname }}.{{ dominio }}'
         backup: yes
 
     - name: Reemplazar por el hostname
       replace:
         dest: /tmp/rhvm_config.conf
         regexp: DOMINIO 
-        replace: '{{ rhvm_dom_gui }}'
-        backup: yes
-
-    - name: Reemplazar por el hostname
-      replace:
-        dest: /tmp/rhvm_config.conf
-        regexp: RHVMPASSWORD
-        replace: '{{ rhvm_adm_pass }}'
+        replace: '{{ dominio }}'
         backup: yes
 
     - name: Agregar a la tabla de host
       lineinfile:
          path: /etc/hosts
-         line: " {{ ansible_ssh_host }} {{ ansible_hostname }}.{{ rhvm_dom_gui }} "
+         line: " {{ ansible_ssh_host }} {{ ansible_hostname }}.{{ dominio }} "
          insertbefore: EOF
 
     - name: "Initializing registration status"
@@ -82,35 +72,49 @@
     - name: Register RHEL
       redhat_subscription:      
         state: present
-        username: "{{ rhsm_usr_name }}"
-        password: "{{ rhsm_usr_pass }}"
-        pool_ids: "{{ rhsm_reg_pool }}"
+        username: ddf4-90a6-de5f-b290
+        password: rhel4ndr34n1#
+        pool_ids: "{{ rhsm_pool }}"
         force_register: yes
 
     - name: "Auto-attach to Subscription Manager Pool"
       command: "/usr/bin/subscription-manager attach --auto"
       when:
         - not registered
-        - rhsm_reg_pool is undefined or rhsm_reg_pool is none or rhsm__reg_pool|trim == ''
+        - rhsm_pool is undefined or rhsm_pool is none or rhsm_pool|trim == ''
       register: autoattach_result
       until: autoattach_result.rc == 0
       retries: 10
       delay: 1
     
+    #- name: "Attach to a specific pool"
+    #  command: "/usr/bin/subscription-manager attach --pool={{ rhsm_pool }}"
+    #  when:
+    #    - rhsm_pool is defined
+    #    - rhsm_pool is not none
+    #    - rhsm_pool|trim != ''
+    #    - not registered
+    #  register: attachpool_result
+    #  until: attachpool_result.rc == 0
+    #  retries: 10
+    #  delay: 1
+        
     - name: "Disable all repositories"
       command: "/usr/bin/subscription-manager repos --disable=*"
       when:
-        - rhsm_add_repo is defined
-        - rhsm_add_repo is not none
-        - rhsm_add_repo|trim != ''
+#        - not registered
+        - rhsm_repos is defined
+        - rhsm_repos is not none
+        - rhsm_repos|trim != ''
 
     - name: "Enable specified repositories"
       command: "/usr/bin/subscription-manager repos --enable={{ item }}"
-      with_items: "{{ rhsm_add_repo }}"
+      with_items: "{{ rhsm_repos }}"
       when:
-        - rhsm_add_repo is defined
-        - rhsm_add_repo is not none
-        - rhsm_add_repo|trim != ''
+#        - not registered
+        - rhsm_repos is defined
+        - rhsm_repos is not none
+        - rhsm_repos|trim != ''
       register: enablerepos_result
       until: enablerepos_result.rc == 0
       retries: 10
@@ -121,7 +125,7 @@
       command: "/usr/bin/yum clean metadata"
       args:
         warn: no
-
+  #   
     - name: Enable postgresql 12
       command: "/usr/bin/dnf module -y enable postgresql:12"
       register: enable_postgresql
@@ -135,12 +139,20 @@
 #      command: "dnf distro-sync --nobest"
 #      register: distro_sync_nobest
    
+#    - name: Install a list of packages 
+#      yum:
+#        name:
+#          - postgresql-contrib
+#          - rhvm 
+#          - ovirt-engine-extension-aaa-ldap-setup
+#        state: present
+
     - name: Install a list of packages 
       yum:
-        name: "{{ rhvm_add_rpms }}"
+        name: "{{ paquetes }}"
         state: present
         update_cache: no
-
+  #  
     - name: Run engine-setup
       command: "engine-setup --config=/tmp/rhvm_config.conf"
       register: engine_setup
