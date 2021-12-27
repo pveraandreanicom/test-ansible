@@ -1,5 +1,5 @@
 ---
-- hosts: {{ new_vmname }}
+- hosts: "{{ new_vmname }}"
   vars:
 
   tasks:
