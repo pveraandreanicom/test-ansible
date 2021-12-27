@@ -16,7 +16,7 @@
       - rhvm 
       - ovirt-engine-extension-aaa-ldap-setup
  
-    rhvm_dom_gui: "{{ rhvm_dominio | default('andreani.com.ar'}}"
+    rhvm_dom_gui: "{{ rhvm_dominio | default('domain.com'}}"
     rhvm_adm_pass: "{{ rhvm_admin_password | default('admin') }}"
     rhsm_usr_name: "{{ rhsm_user | default('rhsm_user')}}"
     rhsm_usr_pass: "{{ rhsm_pass | default('rhsm_pass')}}"
@@ -34,14 +34,14 @@
         replace: '{{ ansible_hostname }}.{{ rhvm_dom_gui}}'
         backup: yes
 
-    - name: Reemplazar por el hostname
+    - name: Aplicar el dominio 
       replace:
         dest: /tmp/rhvm_config.conf
         regexp: DOMINIO 
         replace: '{{ rhvm_dom_gui }}'
         backup: yes
 
-    - name: Reemplazar por el hostname
+    - name: Configurar admin password
       replace:
         dest: /tmp/rhvm_config.conf
         regexp: RHVMPASSWORD
@@ -54,7 +54,7 @@
          line: " {{ ansible_ssh_host }} {{ ansible_hostname }}.{{ rhvm_dom_gui }} "
          insertbefore: EOF
 
-    - name: "Initializing registration status"
+    - name: "Inicializar el estado de registracion..."
       set_fact:
         registered: false
     
@@ -97,14 +97,14 @@
       retries: 10
       delay: 1
     
-    - name: "Disable all repositories"
+    - name: "Deshabilitar todos los repos"
       command: "/usr/bin/subscription-manager repos --disable=*"
       when:
         - rhsm_add_repo is defined
         - rhsm_add_repo is not none
         - rhsm_add_repo|trim != ''
 
-    - name: "Enable specified repositories"
+    - name: "Habilitar los repos especificos"
       command: "/usr/bin/subscription-manager repos --enable={{ item }}"
       with_items: "{{ rhsm_add_repo }}"
       when:
@@ -117,17 +117,17 @@
       delay: 1
   
   ## Handler showing how to clean yum metadata cache
-    - name: yum-clean-metadata
+    - name: Limpiar la meta de yum
       command: "/usr/bin/yum clean metadata"
       args:
         warn: no
 
-    - name: Enable postgresql 12
+    - name: Habilitar postgresql 12
       command: "/usr/bin/dnf module -y enable postgresql:12"
       register: enable_postgresql
 
    
-    - name: Enable pki-deps
+    - name: Habilitar pki-deps
       command: "/usr/bin/dnf module -y enable pki-deps"
       register: enable_pki_deps
    
@@ -135,13 +135,13 @@
 #      command: "dnf distro-sync --nobest"
 #      register: distro_sync_nobest
    
-    - name: Install a list of packages 
+    - name: Instalar los paquetes
       yum:
         name: "{{ rhvm_add_rpms }}"
         state: present
         update_cache: no
 
-    - name: Run engine-setup
+    - name: Configurar rhvm (engine-setup)
       command: "engine-setup --config=/tmp/rhvm_config.conf"
       register: engine_setup
       async: 900
