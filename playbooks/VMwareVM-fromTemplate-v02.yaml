@@ -47,10 +47,11 @@
         - 10.20.2.115
         - 10.20.2.116
 
+  - name: Reboot vm created
     vmware_guest_powerstate:
-    name: "{{ new_vmname }}"
-    state: shutdown-guest
-    state_change_timeout: 200
+      name: "{{ new_vmname }}"
+      state: shutdown-guest
+      state_change_timeout: 200
       
     delegate_to: localhost
     register: deploy
