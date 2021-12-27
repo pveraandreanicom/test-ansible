@@ -11,11 +11,11 @@
            - "net.ipv6.conf.all.disable_ipv6 = 1" 
          insertbefore: EOF
 
-    - name: Por cada interfaz
+    - name: Para cada interfaz
       lineinfile:
         path: /etc/sysctl.d/ipv6.conf
         line: "net.ipv6.conf.item.disable_ipv6 = 1"
-      inserbefore: EOF
+        inserbefore: EOF
       with_items: ansible_interfaces
         
     - name: "Apply config"
