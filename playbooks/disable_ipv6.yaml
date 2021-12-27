@@ -38,7 +38,7 @@
         path: /etc/sysctl.d/ipv6.conf
         line: net.ipv6.conf.{{item}}.disable_ipv6 = 1
         insertbefore: EOF
-      with_items: {{ interface_name }}
+      with_items: "{{ interface_name }}"
         
     - name: "Apply config"
       command: sysctl -p /etc/sysctl.d/ipv6.conf
