@@ -146,10 +146,10 @@
       register: engine_setup
       async: 900
       poll: 10
-
+       
     - name: Instalacion info
       debug:
-      msg: 
+        msg: 
         - "Aplicacion desplegada en:"
         - "https://{{ ansible_hostname }}.{{ rhvm_dom_gui}}"
         - "(https://{{ ansible_ssh_host }})"
