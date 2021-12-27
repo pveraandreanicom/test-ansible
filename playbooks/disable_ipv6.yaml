@@ -34,7 +34,7 @@
         
     - name: "Apply config"
       command: sysctl -p /etc/sysctl.d/ipv6.conf
-      register: sysctl -p
+      register: sysctl
 
     - name: "Regenerate Initial RAM disk"
       command: dracut -f -v
