@@ -18,13 +18,13 @@
         group: root
       when: ipv6conf.stat.exists == False
 
-    - name: set_fact | figure out network device of private network
-      set_fact:
-        interface_name: "{{ hostvars[inventory_hostname]['ansible_' + item]['device'] }}"
-      when:
-        - hostvars[inventory_hostname]['ansible_' + item].ipv4 is defined
-      with_items: "{{ ansible_interfaces }}"
-
+#    - name: set_fact | figure out network device of private network
+#      set_fact:
+#        interface_name: "{{ hostvars[inventory_hostname]['ansible_' + item]['device'] }}"
+#      when:
+#        - hostvars[inventory_hostname]['ansible_' + item].ipv4 is defined
+#      with_items: "{{ ansible_interfaces }}"
+#
     - name: Crear config para ipv6 en sysctl.d
       lineinfile:
          path: /etc/sysctl.d/ipv6.conf
@@ -36,9 +36,9 @@
     - name: Para cada interfaz
       lineinfile:
         path: /etc/sysctl.d/ipv6.conf
-        line: net.ipv6.conf.{{item}}.disable_ipv6 = 1
+        line: net.ipv6.conf.{{hostvars[inventory_hostname]['ansible_' + item]['device'] }}.disable_ipv6 = 1
         insertbefore: EOF
-      with_items: "{{ interface_name }}"
+      with_items: "{{ ansible_interfaces }}"
         
     - name: "Apply config"
       command: sysctl -p /etc/sysctl.d/ipv6.conf
