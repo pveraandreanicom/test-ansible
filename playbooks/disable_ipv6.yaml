@@ -10,8 +10,9 @@
 
     - name: Touch ipv6.conf
       file:
-        path: /etc/sysctl.d/ipv6.conf
+        dest: /etc/sysctl.d/ipv6.conf
         mode: 644
+        state: touch
         owner: root
         group: root
       when: ipv6conf.stat.exists == False
