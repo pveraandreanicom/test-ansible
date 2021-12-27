@@ -3,6 +3,19 @@
   vars:
 
   tasks:
+    - name: Check si ya existe el archivo
+      stat:
+        path: /etc/sysctl.d/ipv6.conf
+      register: ipv6conf
+
+    - name: Touch ipv6.conf
+      file:
+        path: /etc/sysctl.d/ipv6.conf
+        mode: 644
+        owner: root
+        group: root
+      when: ipv6conf.exists == False
+
     - name: Crear config para ipv6 en sysctl.d
       lineinfile:
          path: /etc/systctl.d/ipv6.conf
