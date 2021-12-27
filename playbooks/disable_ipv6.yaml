@@ -29,7 +29,7 @@
       lineinfile:
         path: /etc/sysctl.d/ipv6.conf
         line: "net.ipv6.conf.item.disable_ipv6 = 1"
-        inserbefore: EOF
+        insertbefore: EOF
       with_items: ansible_interfaces
         
     - name: "Apply config"
