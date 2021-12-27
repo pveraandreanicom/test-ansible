@@ -20,15 +20,15 @@
     - name: Crear config para ipv6 en sysctl.d
       lineinfile:
          path: /etc/sysctl.d/ipv6.conf
-         line: 
-           - "# First, disable for all interfaces"
-           - "net.ipv6.conf.all.disable_ipv6 = 1" 
+         line: |
+           # First, disable for all interfaces
+           net.ipv6.conf.all.disable_ipv6 = 1 
          insertbefore: EOF
 
     - name: Para cada interfaz
       lineinfile:
         path: /etc/sysctl.d/ipv6.conf
-        line: "net.ipv6.conf.item.disable_ipv6 = 1"
+        line: "net.ipv6.conf.{{item}}.disable_ipv6 = 1"
         insertbefore: EOF
       with_items: ansible_interfaces
         
