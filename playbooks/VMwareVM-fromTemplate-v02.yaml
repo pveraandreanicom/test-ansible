@@ -46,12 +46,13 @@
         dns_servers:
         - 10.20.2.115
         - 10.20.2.116
+    delegate_to: localhost
+    register: deploy
 
   - name: Reboot vm created
     vmware_guest_powerstate:
       name: "{{ new_vmname }}"
       state: shutdown-guest
       state_change_timeout: 200
-      
     delegate_to: localhost
-    register: deploy
+    register: reboot
