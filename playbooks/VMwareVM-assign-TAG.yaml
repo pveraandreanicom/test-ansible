@@ -1,10 +1,10 @@
 ---
 - name: Add tags to a virtual machine
   vmware_tag_manager:
-      hostname: '{{ lookup("env", "VMWARE_HOST") }}'
-      username: '{{ lookup("env", "VMWARE_USER") }}'
-      password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
-      validate_certs: no
+    hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+    username: '{{ lookup("env", "VMWARE_USER") }}'
+    password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+    validate_certs: no
     tag_names:
       - os: "{{ os_type | default('not-defined') }}"
       - hardware: "{{ hardware_type | default('not-defined') }}"
