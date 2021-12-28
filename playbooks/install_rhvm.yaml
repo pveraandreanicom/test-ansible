@@ -16,10 +16,10 @@
       - rhvm 
       - ovirt-engine-extension-aaa-ldap-setup
  
-    rhvm_dom_gui: "{{ rhvm_dominio | default('domain.com'}}"
+    rhvm_dom_gui: "{{ rhvm_dominio | default('domain.com') }}"
     rhvm_adm_pass: "{{ rhvm_admin_password | default('admin') }}"
-    rhsm_usr_name: "{{ rhsm_user | default('rhsm_user')}}"
-    rhsm_usr_pass: "{{ rhsm_pass | default('rhsm_pass')}}"
+    rhsm_usr_name: "{{ rhsm_user | default('rhsm_user') }}"
+    rhsm_usr_pass: "{{ rhsm_pass | default('rhsm_pass') }}"
     rhsm_reg_pool: "{{ rhsm_pool | default('notsetwillfail') }} "
 
   tasks:
