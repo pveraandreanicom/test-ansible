@@ -53,6 +53,19 @@
     wait_for:
       timeout: 300
     delegate_to: localhost
+
+  -name: Agregado de tags
+   vmware_tag_manager:
+    tag_names:
+      - os: linux
+      - hardware: virtual
+      - ubicacion: onprem
+      - pservicio: vmware
+      - versionso: RedHat8.4
+    object_name: "{{ new_vmname }}"
+    object_type: VirtualMachine
+    state: add
+
      
 #  - name: Reboot vm created
 #    vmware_guest_powerstate:
