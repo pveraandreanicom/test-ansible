@@ -1,5 +1,5 @@
 - name: Add tags to a virtual machine
-  host: localhost
+  hosts: localhost
   connection: local
   tasks:
   - name: tag
