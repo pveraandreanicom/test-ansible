@@ -49,10 +49,15 @@
     delegate_to: localhost
     register: deploy
 
-  - name: Reboot vm created
-    vmware_guest_powerstate:
-      name: "{{ new_vmname }}"
-      state: shutdown-guest
-      state_change_timeout: 200
+  - name: Sleep for 300 seconds to initialize vmware tools
+    wait_for:
+      timeout: 300
     delegate_to: localhost
-    register: reboot
+     
+#  - name: Reboot vm created
+#    vmware_guest_powerstate:
+#      name: "{{ new_vmname }}"
+#      state: shutdown-guest
+#      state_change_timeout: 200
+#    delegate_to: localhost
+#    register: reboot
