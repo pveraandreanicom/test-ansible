@@ -1,0 +1,123 @@
+---
+- hosts: all
+  vars:
+    rhsm_repos: 
+      - rhel-8-for-x86_64-baseos-rpms
+      - rhel-8-for-x86_64-appstream-rpms
+      - rhv-4.4-manager-for-rhel-8-x86_64-rpms
+      - fast-datapath-for-rhel-8-x86_64-rpms
+      - jb-eap-7.3-for-rhel-8-x86_64-rpms
+ 
+    rhsm_pool: 8a85f9997527b04201752908e64d6a5d
+    paquetes:
+      - postgresql-contrib
+      - rhvm
+      - ovirt-engine-extension-aaa-ldap-setup
+
+  tasks:
+
+    - name: "Initializing registration status"
+      set_fact:
+        registered: false
+    
+    - name: "Checking subscription status (a failure means it is not registered and will be)"
+      command: "/usr/bin/subscription-manager status"
+      ignore_errors: yes
+      changed_when: no
+      register: check_if_registered
+
+    - name: "Set registration fact if system is already registered"
+      set_fact:
+        registered: true
+      when: check_if_registered.rc == 0
+
+    - name: "Cleaning any old subscriptions"
+      command: "/usr/bin/subscription-manager clean"
+      when:
+        - not registered
+        - rhsm_authentication is defined
+      register: cleaningsubs_result
+      until: cleaningsubs_result.rc == 0
+      retries: 10
+      delay: 1
+     
+    - name: Register RHEL
+      redhat_subscription:      
+        state: present
+        username: ddf4-90a6-de5f-b290
+        password: rhel4ndr34n1#
+        pool_ids: "{{ rhsm_pool }}"
+        force_register: yes
+
+    - name: "Auto-attach to Subscription Manager Pool"
+      command: "/usr/bin/subscription-manager attach --auto"
+      when:
+        - not registered
+        - rhsm_pool is undefined or rhsm_pool is none or rhsm_pool|trim == ''
+      register: autoattach_result
+      until: autoattach_result.rc == 0
+      retries: 10
+      delay: 1
+    
+    #- name: "Attach to a specific pool"
+    #  command: "/usr/bin/subscription-manager attach --pool={{ rhsm_pool }}"
+    #  when:
+    #    - rhsm_pool is defined
+    #    - rhsm_pool is not none
+    #    - rhsm_pool|trim != ''
+    #    - not registered
+    #  register: attachpool_result
+    #  until: attachpool_result.rc == 0
+    #  retries: 10
+    #  delay: 1
+        
+    - name: "Disable all repositories"
+      command: "/usr/bin/subscription-manager repos --disable=*"
+      when:
+#        - not registered
+        - rhsm_repos is defined
+        - rhsm_repos is not none
+        - rhsm_repos|trim != ''
+
+    - name: "Enable specified repositories"
+      command: "/usr/bin/subscription-manager repos --enable={{ item }}"
+      with_items: "{{ rhsm_repos }}"
+      when:
+#        - not registered
+        - rhsm_repos is defined
+        - rhsm_repos is not none
+        - rhsm_repos|trim != ''
+      register: enablerepos_result
+      until: enablerepos_result.rc == 0
+      retries: 10
+      delay: 1
+  
+  ## Handler showing how to clean yum metadata cache
+    - name: yum-clean-metadata
+      command: yum clean metadata
+      args:
+        warn: no
+  #   
+    - name: Enable postgresql 12
+      command: dnf module -y enable postgresql:12
+      register: enable_postgresql
+
+   
+    - name: Enable pki-deps
+      command: dnf module -y enable pki-deps
+      register: enable_pki-deps
+   
+    - name: Distro Sync
+      command: dnf distro-sync --nobest
+      register: distro_sync_nobest
+   
+    - name: Install a list of packages 
+      yum:
+        with_idems: "{{ paquetes }}"
+        when:
+          - paquetes is defined
+        state: present
+  #  
+    - name: Run engine-setup
+      command: engine-setup --accept-defaults
+      register: engine_setup
