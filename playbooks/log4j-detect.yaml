@@ -1,7 +1,7 @@
 - name: Copy status script , execute it and transfer file to admit.
   hosts: all
   strategy: free
-  gather_facts: no
+  gather_facts: yes
   become: true
 
   tasks:
