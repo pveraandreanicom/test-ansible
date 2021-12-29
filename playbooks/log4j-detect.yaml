@@ -3,7 +3,7 @@
   strategy: free
   gather_facts: no
   become: true
-  var:
+  vars:
     logfile: "/tmp/log4j-detect-{{ansible_hostname}}.log"
 
   tasks:
