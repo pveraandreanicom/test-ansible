@@ -3,8 +3,8 @@
   strategy: free
   gather_facts: no
 #  become: true
-#  vars:
-#    logfile: '/tmp/log4j-detect-{{ansible_hostname}}.log'
+  vars:
+    logfile: '/tmp/log4j-detect-{{ansible_hostname}}.log'
 
   tasks:
   - name: Transfer check scrip"
