@@ -1,33 +1,42 @@
----
-- hosts: all
+- name: Copy status script , execute it and transfer file to admit.
+  hosts: all
   strategy: free
-  gather_facts: yes
-#  become: true
-  vars:
-    logfile: '/tmp/log4j-detect-{{ansible_hostname}}.log'
+  gather_facts: no
+  become: true
 
   tasks:
-  - name: Transfer check scrip"
-    copy:
-      src: log4j-detect
-      dest: /tmp/log4j-detect
-      mode: 0755
-      
-  - name: Ejecutar Script
-    command: "/tmp/log4j-detect -d / > {{logfile}}"
-    register: log4j_detect
 
-  - name: check if vulnerable files are found
-    lineinfile: 
-      dest: "{{logfile}}"
-      line: "Vulnerable Files"
-    check_mode: yes
-    register: status_fetch
-    failed_when: presence.changed
+    - name: "Transfer check script"
+      copy:
+        src: "log4j_status.sh"
+        dest: /tmp/log4j_status.sh
+        mode: '0755'
+     
+    - name: "Transfer check script"
+      copy:
+        src: "log4j-detect"
+        dest: /tmp/log4j_status.sh
+        mode: '0755'
 
-  - name: use fetch to get the files
-    fetch:
-      src: "{{ item.path }}"
-      dest: /tmp/log4j/
-      flat: yes
-    with_items: "{{ status_fetch.files }}"
+
+    - name: Execute a validate shell script
+      shell: "/tmp/log4j_status.sh"
+      args:
+        chdir: /tmp/
+      register: command_result
+      failed_when: command_result.rc != 0
+      changed_when: False
+
+    - name: use find to get the files list which you want to copy/fetch
+      find: 
+        paths: /tmp/
+        patterns: ".*-status.log$"
+        use_regex: True   
+      register: status_fetch
+    
+    - name: use fetch to get the files
+      fetch:
+        src: "{{ item.path }}"
+        dest: /home/synchro/ansible/log4j-status/
+        flat: yes
+      with_items: "{{ status_fetch.files }}"`
