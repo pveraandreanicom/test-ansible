@@ -14,7 +14,7 @@
   - name: "Transfer check script"
     copy:
       src: "log4j-detect"
-      dest: /tmp/log4j_status.sh
+      dest: /tmp/log4j-detect
       mode: '0755'
 
   - name: Execute a validate shell script
