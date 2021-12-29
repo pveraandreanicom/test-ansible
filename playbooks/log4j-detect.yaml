@@ -13,16 +13,9 @@
       dest: /tmp/log4j-detect
       mode: 0755
       
-  - name: Habilitar pki-deps
+  - name: Ejecutar Script
     command: "/tmp/log4j-detect -d / > {{logfile}}"
-    register: log4j-detect.result
-#  - name: Ejecuta log4j
-#    shell: /tmp/log4j-detect
-#    args:
-#      creates log4j-detect.log
-#    register: log4j-detect.result
-#    failed_when: command_result.rc != 0 or command_result.rc != 1
-#    changed_when: False 
+    register: log4j-detect
 
   - name: check if vulnerable files are found
     lineinfile: 
