@@ -15,7 +15,7 @@
       
   - name: Ejecutar Script
     command: "/tmp/log4j-detect -d / > {{logfile}}"
-    register: log4j-detect
+    register: log4j_detect
 
   - name: check if vulnerable files are found
     lineinfile: 
