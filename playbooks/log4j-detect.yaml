@@ -2,24 +2,27 @@
 - hosts: all
   strategy: free
   gather_facts: no
-  become: true
-  vars:
-    logfile: "/tmp/log4j-detect-{{ansible_hostname}}.log"
+#  become: true
+#  vars:
+#    logfile: '/tmp/log4j-detect-{{ansible_hostname}}.log'
 
   tasks:
-  - name: "Transfer check script"
+  - name: Transfer check scrip"
     copy:
-      src: "log4j-detect"
-      dest: /tmp/
+      src: log4j-detect
+      dest: /tmp/log4j-detect
       mode: 0755
       
-  - name: Execute log4j-detect
-    shell: "/tmp/log4j-detect > {{logfile}}"
-    args:
-      creates log4j-detect.log
+  - name: Habilitar pki-deps
+    command: "/tmp/log4j-detect -d / > {{logfile}}"
     register: log4j-detect.result
-#    failed_when: command_result.rc != 0 or command_result.rc 
-    changed_when: False 
+#  - name: Ejecuta log4j
+#    shell: /tmp/log4j-detect
+#    args:
+#      creates log4j-detect.log
+#    register: log4j-detect.result
+#    failed_when: command_result.rc != 0 or command_result.rc != 1
+#    changed_when: False 
 
   - name: check if vulnerable files are found
     lineinfile: 
