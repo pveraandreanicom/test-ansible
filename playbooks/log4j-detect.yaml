@@ -30,7 +30,7 @@
     - name: use find to get the files list which you want to copy/fetch
       find: 
         paths: /tmp/
-        patterns: ".*-status.log$"
+        patterns: "log4j-detect-status.log$"
         use_regex: True   
       register: status_fetch
     
