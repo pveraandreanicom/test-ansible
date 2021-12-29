@@ -37,12 +37,12 @@
       line: "No vulnerabilities were detected"
       state: present
     register: presence
-#    failed_when: presence is not changed
+    failed_when: presence is changed
     
   - name: use fetch to get the files
     fetch:
       src: "/tmp/log4j-detect-{{ansible_hostname}}-status.log"
-      dest: /tmp/log4j/
+      dest: "/tmp/log4j/"
       flat: yes
     when: presence is changed
 #    with_items: "{{ status_fetch.files }}"
