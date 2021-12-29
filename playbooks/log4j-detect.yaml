@@ -11,10 +11,10 @@
     copy:
       src: "log4j-detect"
       dest: /tmp/
-      mode: '0755'
-
+      mode: 0755
+      
   - name: Execute log4j-detect
-    shell: /tmp/log4j-detect > "{{logfile}}"
+    shell: "/tmp/log4j-detect > {{logfile}}"
     args:
       creates log4j-detect.log
     register: log4j-detect.result
