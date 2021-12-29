@@ -25,16 +25,24 @@
     failed_when: command_result.rc != 0
     changed_when: False
 
-  - name: use find to get the files list which you want to copy/fetch
-    find: 
-      paths: /tmp/
-      patterns: "log4j-detect-.*-status.log$"
-      use_regex: True   
-    register: status_fetch
+#  - name: use find to get the files list which you want to copy/fetch
+#    find: 
+#      paths: /tmp/
+#      patterns: "log4j-detect-.*-status.log$"
+#      use_regex: True   
+#    register: status_fetch
+  - name: check files affected
+    lineinfile:
+      path: "/tmp/log4j-detect-{{ansible_hostname}}-status.log"
+      line: "Vulnerabie Files:"
+      state: present
+    register: presence
+    failed_when: presence is changed
     
   - name: use fetch to get the files
     fetch:
-      src: "{{ item.path }}"
+      src: "/tmp/log4j-detect-{{ansible_hostname}}-status.log"
       dest: /tmp/log4j/
       flat: yes
-    with_items: "{{ status_fetch.files }}"
+    when: presence is changed
+#    with_items: "{{ status_fetch.files }}"
