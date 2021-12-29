@@ -34,10 +34,10 @@
   - name: check files affected
     lineinfile:
       path: "/tmp/log4j-detect-{{ansible_hostname}}-status.log"
-      line: "Vulnerabie Files:"
+      line: "No vulnerabilities were detected"
       state: present
     register: presence
-    failed_when: presence is changed
+#    failed_when: presence is not changed
     
   - name: use fetch to get the files
     fetch:
