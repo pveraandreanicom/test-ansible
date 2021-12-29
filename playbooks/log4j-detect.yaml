@@ -18,7 +18,7 @@
       mode: '0755'
 
   - name: Execute a validate shell script
-    shell: "/tmp/log4j_status.sh"
+    shell: "/tmp/log4j_status.sh {{ansible_hostname}}"
     args:
       chdir: /tmp/
     register: command_result
@@ -28,7 +28,7 @@
   - name: use find to get the files list which you want to copy/fetch
     find: 
       paths: /tmp/
-      patterns: "log4j-detect-status.log$"
+      patterns: "log4j-detect-.*-status.log$"
       use_regex: True   
     register: status_fetch
     
