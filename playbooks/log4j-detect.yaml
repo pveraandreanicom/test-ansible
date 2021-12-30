@@ -1,9 +1,12 @@
+
 - name: Copy status script , execute it and transfer file to admit.
   hosts: all
   strategy: free
   gather_facts: yes
   become: true
 
+# ARCH=amd64
+# wget "https://github.com/whitesource/log4j-detect-distribution/releases/latest/download/log4j-detect-1.4.0-linux-$ARCH.tar.gz"
   tasks:
   - name: "Transfer check script"
     copy:
@@ -25,19 +28,13 @@
     failed_when: command_result.rc != 0
     changed_when: False
 
-#  - name: use find to get the files list which you want to copy/fetch
-#    find: 
-#      paths: /tmp/
-#      patterns: "log4j-detect-.*-status.log$"
-#      use_regex: True   
-#    register: status_fetch
   - name: check files affected
     lineinfile:
       path: "/tmp/log4j-detect-{{ansible_hostname}}-status.log"
       line: "No vulnerabilities were detected"
       state: present
     register: presence
-    failed_when: presence is changed
+    failed_when: presence is not changed
     
   - name: use fetch to get the files
     fetch:
