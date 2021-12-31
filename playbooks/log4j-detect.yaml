@@ -16,7 +16,7 @@
       path: "{{log4jdir}}"
     register: l4j
 
-  - name: "Delete content & directory {{log4jdir}}"
+  - name: "Delete content & directory"
     file:
       state: absent
       path: "{{log4jdir}}"
@@ -24,12 +24,11 @@
 
   - name: "Create directory"
     file:
-    path: "{{log4jdir}}"
-    state: directory
-    mode: 0755
-    group: root
-    owner: root
-    when: l4j.stat.exists == false
+      path: "{{log4jdir}}"
+      state: directory
+      mode: 0755
+      group: root
+      owner: root
 
   - name: "Transfer check script"
     copy:
