@@ -43,7 +43,7 @@
       mode: '0755'
 
   - name: Execute a validate shell script
-    shell: "{{log4jdir}}/log4j_status.sh {{ansible_hostname}}"
+    shell: "{{log4jdir}}/log4j_status.sh {{log4jdir}} {{ansible_hostname}}"
     args:
       chdir: "{{log4jdir}}"
     register: command_result
