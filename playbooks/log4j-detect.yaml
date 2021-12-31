@@ -22,7 +22,7 @@
       path: "{{log4jdir}}"
     when: l4j.stat.exists == true
 
-  - name: "Create directory {{log4jdir}}"
+  - name: "Create directory"
     file:
     path: "{{log4jdir}}"
     state: directory
