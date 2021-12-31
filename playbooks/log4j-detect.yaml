@@ -11,9 +11,9 @@
 # ARCH=amd64
 # wget "https://github.com/whitesource/log4j-detect-distribution/releases/latest/download/log4j-detect-1.4.0-linux-$ARCH.tar.gz"
   tasks:
-  - name: "Check directory"
+  - name: "Check directory {{log4jdir}}"
     stat:
-    path: "{{log4jdir}}"
+      path: "{{log4jdir}}"
     register: l4j
 
   - name: "Delete content & directory {{log4jdir}}"
