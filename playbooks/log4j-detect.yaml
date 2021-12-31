@@ -4,42 +4,61 @@
   strategy: free
   gather_facts: yes
   become: true
+  vars: 
+    log4jdir: /tmp/log4j
+    filelog: "{{log4jdir}}/log4j-detect-{{ansible_hostname}}-status.log"
 
 # ARCH=amd64
 # wget "https://github.com/whitesource/log4j-detect-distribution/releases/latest/download/log4j-detect-1.4.0-linux-$ARCH.tar.gz"
   tasks:
+  - name: "Check directory {{log4jdir}}
+    stat:
+    path: {{log4jdir}}
+    register: l4j
+
+  - name: "Delete content & directory {{log4jdir}}"
+    file:
+      state: absent
+      path: {{log4jdir}}
+    when: l4j.stat.exists == true
+
+  - name: "Create directory {{log4jdir}}"
+    file:
+    path: {{log4jdir}}
+    state: directory
+    mode: 0755
+    group: root
+    owner: root
+    when: l4j.stat.exists == false
+
   - name: "Transfer check script"
     copy:
       src: "log4j_status.sh"
-      dest: /tmp/log4j_status.sh
+      dest: "{{log4jdir}}"
       mode: '0755'
      
   - name: "Transfer check script"
     copy:
       src: "log4j-detect"
-      dest: /tmp/log4j-detect
+      dest: "{{log4jdir}}"
       mode: '0755'
 
   - name: Execute a validate shell script
-    shell: "/tmp/log4j_status.sh {{ansible_hostname}}"
+    shell: "{{log4jdir}}/log4j_status.sh {{ansible_hostname}}"
     args:
-      chdir: /tmp/
+      chdir: "{{log4jdir}}"
     register: command_result
     failed_when: command_result.rc != 0
     changed_when: False
 
   - name: check files affected
-    lineinfile:
-      path: "/tmp/log4j-detect-{{ansible_hostname}}-status.log"
-      search_string: "No vulnerabilities were detected"
-    register: presence
-    failed_when: presence is not changed
-#    failed_when: not presence is search("") 
+    shell: grep "No vulnerabilities were detected" "{{ filelog }}"
+    changed_when: false
     
-  - name: use fetch to get the files
-    fetch:
-      src: "/tmp/log4j-detect-{{ansible_hostname}}-status.log"
-      dest: "/tmp/log4j/"
-      flat: yes
-    when: presence is changed
+#  - name: use fetch to get the files
+#    fetch:
+#      src: "{{ filelog }}"
+#      dest: "/tmp/log4j/"
+#      flat: yes
+#    when: presence is changed
 #    with_items: "{{ status_fetch.files }}"
