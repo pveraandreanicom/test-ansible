@@ -12,8 +12,14 @@
             paths:
               - /var/log/nginx/*.log
             options:
-              - weekly
+              - daily
+              - rotate 60
               - compress
+              - missingok
+              - notifempty
+              - postrotate
+              - "  nginx -s reload"
+              - endscript
           - name: rsyslog
             paths:
               - /var/log/kern.log
