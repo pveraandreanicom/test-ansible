@@ -1,0 +1,59 @@
+---
+- hosts: "{{ new_vmname | default('rhvmprueba') }}"
+  vars:
+  gather_facts: yes
+
+  tasks:
+    - name: Check si ya existe el archivo
+      stat:
+        path: /etc/sysctl.d/ipv6.conf
+      register: ipv6conf
+
+    - name: Touch ipv6.conf
+      file:
+        dest: /etc/sysctl.d/ipv6.conf
+        mode: 644
+        state: touch
+        owner: root
+        group: root
+      when: ipv6conf.stat.exists == False
+
+#    - name: set_fact | figure out network device of private network
+#      set_fact:
+#        interface_name: "{{ hostvars[inventory_hostname]['ansible_' + item]['device'] }}"
+#      when:
+#        - hostvars[inventory_hostname]['ansible_' + item].ipv4 is defined
+#      with_items: "{{ ansible_interfaces }}"
+#
+    - name: Crear config para ipv6 en sysctl.d
+      lineinfile:
+         path: /etc/sysctl.d/ipv6.conf
+         line: |
+           # First, disable for all interfaces
+           net.ipv6.conf.all.disable_ipv6 = 1 
+         insertbefore: EOF
+
+    - name: Para cada interfaz
+      lineinfile:
+        path: /etc/sysctl.d/ipv6.conf
+        line: net.ipv6.conf.{{hostvars[inventory_hostname]['ansible_' + item]['device'] }}.disable_ipv6 = 1
+        insertbefore: EOF
+      with_items: "{{ ansible_interfaces }}"
+        
+    - name: "Apply config"
+      command: sysctl -p /etc/sysctl.d/ipv6.conf
+      register: sysctl
+
+    - name: "Regenerate Initial RAM disk"
+      command: dracut -f -v
+      register: dracut
+      when: ansible_facts['os_family'] == "RedHat"
+
+    - name: "Fix hosts table"
+      replace:
+        dest: /etc/hosts
+        regexp: "^[[:space:]]*::"
+        replace: ""#::"
+        backup: yes
+ 
+
