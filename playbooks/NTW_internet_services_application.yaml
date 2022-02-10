@@ -2,8 +2,6 @@
   - fortinet.fortios
   connection: httpapi
   hosts: all
-  username: pvera
-  password: andreani2021
   vars:
     ansible_httpapi_port: 443
     ansible_httpapi_use_ssl: true
@@ -12,6 +10,8 @@
   tasks:
   - name: fortios_firewall_internet_service
     fortios_firewall_internet_service:
+      username: pvera
+      password: andreani2021
       vdom: root
       state: present
       firewall_internet_service:
