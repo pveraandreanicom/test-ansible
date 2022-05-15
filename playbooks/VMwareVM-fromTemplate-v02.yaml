@@ -11,7 +11,7 @@
       password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
       validate_certs: no
       name: "{{ new_vmname }}"
-      template: "nu-template-podman"
+      template: "DCGLA-DESA-TEST/vm/nu-template-podman"
       datacenter: "DCGLA-DESA-TEST"
       folder: "/Linux-test"
       cluster: "CL-GLA-DESA-TEST"
