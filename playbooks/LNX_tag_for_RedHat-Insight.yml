@@ -19,9 +19,12 @@
 
   - name: Exporto variables
     set_fact:
-      ambiente: "{{ info.instance.tags | json_query(ambiente) }}"
-      proyecto: "{{ info.instance.tags | json_query(ambiente.name) }}"
+      ambiente: "{{ info.instance.tags | json_query(vambiente) }}"
+      proyecto: "{{ info.instance.tags | json_query(vproyecto) }}"
   #  no_log: true
+    vars:
+      vambiente: "tags[?categoria_name=='ambiente'].name"
+      vproyecto: "tags[?categoria_name=='proyecto'].name"
 
   - name: Debugeamo
     debug:
