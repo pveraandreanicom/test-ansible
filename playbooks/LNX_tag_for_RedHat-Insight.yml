@@ -1,13 +1,13 @@
 
 - name: Get info about tag
-  community.vmware.vmware_tag_info:
+  vmware_tag_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
   delegate_to: localhost
 
 - name: Get category id from the given tag
-  community.vmware.vmware_tag_info:
+  vmware_tag_info:
     hostname: '{{ vcenter_hostname }}'
     username: '{{ vcenter_username }}'
     password: '{{ vcenter_password }}'
