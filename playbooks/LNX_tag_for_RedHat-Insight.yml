@@ -22,6 +22,8 @@
       ambiente: "{{ info.instance.tags | json_query(ambiente) }}"
       proyecto: "{{ info.instance.tags | json_query(ambiente.name) }}"
   #  no_log: true
+
+  - name: Debugeamo
     debug:
         msg:
         - "ambiente {{ ambiente }}"
