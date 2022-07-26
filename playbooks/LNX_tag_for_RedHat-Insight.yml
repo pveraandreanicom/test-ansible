@@ -1,18 +1,36 @@
 
-- name: Write tags for RedHat Insight
-  hosts: all
-  strategy: free
-  gather_facts: yes
-  become: true
-  vars: 
-    log4jdir: /tmp/log4j
-    filelog: "{{log4jdir}}/log4j-detect-{{ansible_hostname}}-status.log"
+- name: Get info about tag
+  community.vmware.vmware_tag_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+  delegate_to: localhost
 
-  tasks:
-  - name: "Check directory"
-    stat:
-      path: "{{log4jdir}}"
-    register: l4j
+- name: Get category id from the given tag
+  community.vmware.vmware_tag_info:
+    hostname: '{{ vcenter_hostname }}'
+    username: '{{ vcenter_username }}'
+    password: '{{ vcenter_password }}'
+  delegate_to: localhost
+  register: tag_details
+- debug:
+    msg: "{{ tag_details.tag_facts['fedora_machines']['tag_category_id'] }}"
+
+#
+#- name: Write tags for RedHat Insight
+#  hosts: all
+#  strategy: free
+#  gather_facts: yes
+#  become: true
+#  vars: 
+#    log4jdir: /tmp/log4j
+#    filelog: "{{log4jdir}}/log4j-detect-{{ansible_hostname}}-status.log"
+#
+#  tasks:
+#  - name: "Check directory"
+#    stat:
+#      path: "{{log4jdir}}"
+#    register: l4j
 
 #  - name: "Delete content & directory"
 #    file:
