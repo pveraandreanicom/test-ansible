@@ -21,7 +21,7 @@
     set_fact:
       ambiente: "{{ info.instance.tags | json_query(ambiente) }}"
       proyecto: "{{ info.instance.tags | json_query(ambiente.name) }}"
-    no_log: true
+  #  no_log: true
     debug:
         msg:
         - "ambiente {{ ambiente }}"
