@@ -1,31 +1,65 @@
 ---
 - name: Get tag from virtual machine
-  hosts: localhost
-  connection: local
+  hosts: all
+  #connection: local
   gather_facts: no
   tasks:
-  - name: Gather detailed information about tags and category associated with the given VM
+  - name: Traigo TAGs de SDK VMWARE
     vmware_guest_info:
       hostname: '{{ lookup("env", "VMWARE_HOST") }}'
       username: '{{ lookup("env", "VMWARE_USER") }}'
       password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
-      datacenter: "DCGLA-DESA-TEST"
-      name: "INFNTB01"
+      datacenter: "DCGLA"
+      name: "{{inventory_hostname}}"
       tags: True
       tag_details: True
-    register: detailed_tag_info
+    delegate_to: localhost
+    register: info
+    no_log: true
 
-  - name: save the Json data to a Variable as a Fact
+  - name: Exporto variables
     set_fact:
-      #jsondata: "{{ detailed_tag_info | from_json  }}"
-      jsondata: "{{ detailed_tag_info | to_json  }}"
+      ambiente: "{{ info.instance.tags" | json_query(ambiente) }}"
+      proyecto: "{{ info.instance.tags" | json_query(ambiente.name)
+    no_log: true
+    debug:
+        msg:
+        - "ambiente {{ ambiente }}"
+        - "proyecto {{ proyecto }}"
+      
 
-  - name: set gerencia
-    set_fact:
-      tags_gerencia: "{{ jsondata | json_query(jmesquery) }}"
-    vars:
-      jmesquery: 'instance.tags.category_name'
-
-  - debug:
-      #msg: "Categorias {{ jsondata }}"
-      msg: "Categorias {{ tags_gerencia }}"
+#  - name: Copio configuracion en directorio Metricbeat
+#    copy: 
+#      src: archivos/metricbeat-base.yml
+#      dest: /etc/metricbeat/metricbeat.yml
+#    no_log: true
+#
+#  - name: Inserto bloque de custom fields
+#    blockinfile:
+#      path: /etc/metricbeat/metricbeat.yml
+#      marker: ""
+#      block: |
+#        processors:
+#          - add_host_metadata: ~
+#          - add_fields:
+#              target: ''
+#              fields:
+#                tag{{ nombre0 }}: {{ valor0 }}
+#                tag{{ nombre1 }}: {{ valor1 }}
+#                tag{{ nombre2 }}: {{ valor2 }}
+#                tag{{ nombre3 }}: {{ valor3 }}
+#                tag{{ nombre4 }}: {{ valor4 }}
+#                tag{{ nombre5 }}: {{ valor5 }}
+#                tag{{ nombre6 }}: {{ valor6 }}
+#                tag{{ nombre7 }}: {{ valor7 }}
+#                tag{{ nombre8 }}: {{ valor8 }}
+#                tag{{ nombre9 }}: {{ valor9 }}
+#                tag{{ nombre9 }}: {{ valor10 }}
+#                tag{{ nombre9 }}: {{ valor11 }}
+#    no_log: true
+#    
+#  - name: "Reiniciamos servicio Metricbeat"
+#    service:
+#      name: metricbeat
+#      state: restarted
+#    no_log: true
