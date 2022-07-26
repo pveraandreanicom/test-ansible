@@ -23,8 +23,8 @@
       proyecto: "{{ info.instance.tags | json_query(vproyecto) }}"
   #  no_log: true
     vars:
-      vambiente: "tags[?categoria_name=='ambiente'].name"
-      vproyecto: "tags[?categoria_name=='proyecto'].name"
+      vambiente: "tags[?category_name=='ambiente'].name"
+      vproyecto: "tags[?category_name=='proyecto'].name"
 
   - name: Debugeamo
     debug:
