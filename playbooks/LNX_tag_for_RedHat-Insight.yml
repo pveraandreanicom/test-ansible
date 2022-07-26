@@ -1,71 +1,31 @@
+---
+- name: Get tag from virtual machine
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  tasks:
+  - name: Gather detailed information about tags and category associated with the given VM
+    vmware_guest_info:
+      hostname: '{{ lookup("env", "VMWARE_HOST") }}'
+      username: '{{ lookup("env", "VMWARE_USER") }}'
+      password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
+      datacenter: "DCGLA"
+      name: "rhvmprueba"
+      tags: True
+      tag_details: True
+    register: detailed_tag_info
 
-- name: Get info about tag
-  vmware_tag_info:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-  delegate_to: localhost
+  - name: save the Json data to a Variable as a Fact
+    set_fact:
+      #jsondata: "{{ detailed_tag_info | from_json  }}"
+      jsondata: "{{ detailed_tag_info | to_json  }}"
 
-- name: Get category id from the given tag
-  vmware_tag_info:
-    hostname: '{{ vcenter_hostname }}'
-    username: '{{ vcenter_username }}'
-    password: '{{ vcenter_password }}'
-  delegate_to: localhost
-  register: tag_details
-- debug:
-    msg: "{{ tag_details.tag_facts['fedora_machines']['tag_category_id'] }}"
+  - name: set gerencia
+    set_fact:
+      tags_gerencia: "{{ jsondata | json_query(jmesquery) }}"
+    vars:
+      jmesquery: 'instance.tags.category_name'
 
-#
-#- name: Write tags for RedHat Insight
-#  hosts: all
-#  strategy: free
-#  gather_facts: yes
-#  become: true
-#  vars: 
-#    log4jdir: /tmp/log4j
-#    filelog: "{{log4jdir}}/log4j-detect-{{ansible_hostname}}-status.log"
-#
-#  tasks:
-#  - name: "Check directory"
-#    stat:
-#      path: "{{log4jdir}}"
-#    register: l4j
-
-#  - name: "Delete content & directory"
-#    file:
-#      state: absent
-#      path: "{{log4jdir}}"
-#    when: l4j.stat.exists == true
-#
-#  - name: "Create directory"
-#    file:
-#      path: "{{log4jdir}}"
-#      state: directory
-#      mode: 0755
-#      group: root
-#      owner: root
-#
-#  - name: "Transfer check script"
-#    copy:
-#      src: "log4j_status.sh"
-#      dest: "{{log4jdir}}"
-#      mode: '0755'
-#     
-#  - name: "Transfer check script"
-#    copy:
-#      src: "log4j-detect"
-#      dest: "{{log4jdir}}"
-#      mode: '0755'
-#
-#  - name: Execute a validate shell script
-#    shell: "{{log4jdir}}/log4j_status.sh {{log4jdir}} {{ansible_hostname}}"
-#    args:
-#      chdir: "{{log4jdir}}"
-#    register: command_result
-#    failed_when: command_result.rc != 0
-#    changed_when: False
-#
-#  - name: check files affected
-#    shell: grep "No vulnerabilities were detected" "{{ filelog }}"
-#    changed_when: false
+  - debug:
+      #msg: "Categorias {{ jsondata }}"
+      msg: "Categorias {{ tags_gerencia }}"
