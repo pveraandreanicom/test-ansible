@@ -9,7 +9,7 @@
       hostname: '{{ lookup("env", "VMWARE_HOST") }}'
       username: '{{ lookup("env", "VMWARE_USER") }}'
       password: '{{ lookup("env", "VMWARE_PASSWORD") }}'
-      datacenter: "DCGLA"
+      datacenter: "DCGLA-DESA-TEST"
       name: "INFNTB01"
       tags: True
       tag_details: True
