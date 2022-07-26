@@ -15,7 +15,7 @@
       tag_details: True
     delegate_to: localhost
     register: info
-    no_log: true
+    no_log: false
 
   - name: Exporto variables
     set_fact:
