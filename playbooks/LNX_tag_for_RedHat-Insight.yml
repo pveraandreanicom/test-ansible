@@ -31,7 +31,7 @@
         msg:
         - "ambiente {{ ambiente }}"
         - "proyecto {{ proyecto }}"
-        - info.instance.tags
+        - "{{ info.instance.tags }}"
       
 
 #  - name: Copio configuracion en directorio Metricbeat
