@@ -1,0 +1,19 @@
+- name: Register a subscription and a host with Insights
+  hosts: all
+  become: yes
+  remote_user: ec2-user
+  collections:   # Define collections to search
+    - redhatinsights.insights
+    - community.general
+
+  tasks:
+    - name: Register as user with password for RHN
+      community.general.redhat_subscription:
+        state: present
+        username: "{{ lookup('env', 'redhat_portal_username') }}"
+        password: "{{ lookup('env', 'redhat_portal_password') }}"
+    
+    - include_role: 
+        name: insights_client
+      when: ansible_os_family == 'RedHat'
+
