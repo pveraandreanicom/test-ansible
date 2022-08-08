@@ -1,0 +1,14 @@
+- name: Check if this Red Hat is subscribed to something
+  hosts: all
+  gather_facts: no
+  
+  tasks:
+  - name: Check registration command
+    shell: subscription-manager list
+    register: command_result
+    failed_when: command_result.rc != 0 or 'Subscribed' not in command_result.stdout
+    chenged_when: false
+    
+ - debug:
+   msg: "{{command_result.stdout}}"
+   
