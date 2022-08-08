@@ -1,6 +1,6 @@
 - name: Check if this Red Hat is subscribed to something
   hosts: all
-  gather_facts: no
+  gather_facts: true
   
   tasks:
   - name: Check registration command
