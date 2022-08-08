@@ -7,7 +7,7 @@
     shell: subscription-manager list
     register: command_result
     failed_when: command_result.rc != 0 or 'Subscribed' not in command_result.stdout
-    chenged_when: false
+    changed_when: false
     
   - debug:
     msg: "{{command_result.stdout}}"
