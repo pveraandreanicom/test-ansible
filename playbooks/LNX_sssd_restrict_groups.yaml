@@ -9,10 +9,10 @@
       dest: /tmp/test.txt
       insertafter: [domain/andreani.com.ar]
       block: |
-        ad_access_filter = (CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)
+        ad_access_filter = (memberOf=CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)
       
   - name: "sudo without password for {{ adgroup }} group"
     blockinfile:
       dest: /tmp/test.txt
       block: |
-        ad_access_filter = (&(CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)({{ adgroup}}))
+        ad_access_filter = (&(memberOf=CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)(memberOf={{ adgroup}}))
