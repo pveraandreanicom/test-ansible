@@ -1,0 +1,19 @@
+- name: "Add {{ adgroup }} group for ssh access on sssd"
+  # refference https://docs.pagure.org/sssd.sssd/design_pages/active_directory_access_control.html
+  hosts: all
+  gather_facts: true
+  
+  tasks:
+  - name: "sudo without password for superusuarios group"
+    blockinfile:
+      dest: /tmp/test.txt
+      block: |
+      [domain/andreani.com.ar]
+      ad_access_filter = (CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)
+      
+  - name: "sudo without password for {{ adgroup }} group"
+    blockinfile:
+      dest: /tmp/test.txt
+      block: |
+      [domain/andreani.com.ar]
+      ad_access_filter = (&(CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)({{ adgroup}}))
