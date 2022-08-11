@@ -7,7 +7,7 @@
     lineinfile:
       state: present
       line: "%superusuarios@andreani.com.ar ALL=(ALL:ALL) NOPASSWD:ALL"
-      path: /etc/sudoers.d/pert_nopasswd
+      path: /etc/sudoers.d/superusuarios_nopasswd
       create: yes
       mode: 0440
       validate: 'visudo -cf %s'
