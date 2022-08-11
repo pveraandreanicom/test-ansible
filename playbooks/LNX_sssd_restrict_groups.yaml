@@ -2,14 +2,12 @@
 - name: "Add {{ adgroup }} group for ssh access on sssd"
   hosts: all
   gather_facts: true
-  vars:
-    joineado: 'realm-name\: ANDREANI.COM.AR'
   
   tasks:
   - name: Check join status
     shell: realm list
     register: command_result
-    failed_when: command_result.rc != 0 or {{ joineado }} not in command_result.stdout
+    failed_when: command_result.rc != 0 or "ANDREANI.COM.AR" not in command_result.stdout
     
   - name: "sudo without password for superusuarios group"
     blockinfile:
