@@ -15,8 +15,8 @@
   - name: "sudo without password for {{ adgroup }} group"
     lineinfile:
       state: present
-      line: "%{{ adgroup }} ALL=(ALL:ALL) NOPASSWD:ALL"
-      path: /etc/sudoers.d/pert_nopasswd
+      line: "%{{ adgroup }}@andreani.com.ar ALL=(ALL:ALL) NOPASSWD:ALL"
+      path: "/etc/sudoers.d/{{ adgroup }}_nopasswd"
       create: yes
       mode: 0440
       validate: 'visudo -cf %s'
