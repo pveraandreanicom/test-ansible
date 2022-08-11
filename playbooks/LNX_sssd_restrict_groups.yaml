@@ -13,14 +13,14 @@
     
   - name: "sudo without password for superusuarios group"
     blockinfile:
-      dest: {{ sssdconf }}
+      dest: "{{ sssdconf }}"
       insertafter: [domain/andreani.com.ar]
       block: |
         ad_access_filter = (memberOf=CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)
       
   - name: "sudo without password for {{ adgroup }} group"
     blockinfile:
-      dest: {{ sssdconf }}
+      dest: "{{ sssdconf }}"
       block: |
         ad_access_filter = (&(memberOf=CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)(memberOf={{ adgroup}}))
         
