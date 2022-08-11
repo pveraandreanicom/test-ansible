@@ -7,13 +7,12 @@
   - name: "sudo without password for superusuarios group"
     blockinfile:
       dest: /tmp/test.txt
+      insertafter: [domain/andreani.com.ar]
       block: |
-        [domain/andreani.com.ar]
         ad_access_filter = (CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)
       
   - name: "sudo without password for {{ adgroup }} group"
     blockinfile:
       dest: /tmp/test.txt
       block: |
-        [domain/andreani.com.ar]
         ad_access_filter = (&(CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)({{ adgroup}}))
