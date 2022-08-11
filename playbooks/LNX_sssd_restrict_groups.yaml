@@ -7,7 +7,7 @@
   - name: Check join status
     shell: realm
     register: command_result
-    failed_when: command_result.rc != 0 or "realm-name: ANDREANI.COM.AR" not in command_result.stdout
+    failed_when: command_result.rc != 0 or "realm-name\: ANDREANI.COM.AR" not in command_result.stdout
     
   - name: "sudo without password for superusuarios group"
     blockinfile:
