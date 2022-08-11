@@ -9,7 +9,7 @@
   - name: Check join status
     shell: realm list
     register: command_result
-    failed_when: command_result.rc != 0 or "{{ joineado }}" not in command_result.stdout
+    failed_when: command_result.rc != 0 or {{ joineado }} not in command_result.stdout
     
   - name: "sudo without password for superusuarios group"
     blockinfile:
