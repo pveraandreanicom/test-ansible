@@ -3,7 +3,7 @@
   hosts: all
   gather_facts: true
   vars:
-    joineado: "realm-name{{ ':' }} ANDREANI.COM.AR"
+    joineado: 'realm-name\: ANDREANI.COM.AR'
   
   tasks:
   - name: Check join status
