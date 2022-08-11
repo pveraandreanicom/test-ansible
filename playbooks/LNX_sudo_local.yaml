@@ -1,0 +1,23 @@
+- name: "Add {{ adgroup }} group to local sudoers"
+  hosts: all
+  gather_facts: true
+  
+  tasks:
+  - name: "sudo without password for superusuarios group"
+    lineinfile:
+      state: present
+      line: "%superusuarios@andreani.com.ar ALL=(ALL:ALL) NOPASSWD:ALL"
+      path: /etc/sudoers.d/pert_nopasswd
+      create: yes
+      mode: 0440
+      validate: 'visudo -cf %s'
+      
+  - name: "sudo without password for {{ adgroup }} group"
+    lineinfile:
+      state: present
+      line: "%{{ adgroup }} ALL=(ALL:ALL) NOPASSWD:ALL"
+      path: /etc/sudoers.d/pert_nopasswd
+      create: yes
+      mode: 0440
+      validate: 'visudo -cf %s'
+      
