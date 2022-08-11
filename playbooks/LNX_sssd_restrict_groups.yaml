@@ -22,7 +22,7 @@
     blockinfile:
       dest: "{{ sssdconf }}"
       block: |
-        ad_access_filter = (&(memberOf=CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)(memberOf={{ adgroup}}))
+        ad_access_filter = (|(memberOf=CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)(memberOf={{ adgroup}}))
         
   - name: sshd restart
     service:
