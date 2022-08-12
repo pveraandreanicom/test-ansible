@@ -11,14 +11,14 @@
     register: command_result
     failed_when: command_result.rc != 0 or "ANDREANI.COM.AR" not in command_result.stdout
     
-  - name: "sudo without password for superusuarios group"
+  - name: "Access for superusuarios group"
     blockinfile:
       dest: "{{ sssdconf }}"
       insertafter: [domain/andreani.com.ar]
       block: |
         ad_access_filter = (memberOf=CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)
       
-  - name: "sudo without password for {{ adgroup }} group"
+  - name: "Access for {{ adgroup }} group"
     blockinfile:
       dest: "{{ sssdconf }}"
       block: |
