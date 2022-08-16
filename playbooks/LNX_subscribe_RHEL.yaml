@@ -10,3 +10,7 @@
       password: '{{ lookup("env", "RHEL_password") }}'
       pool_ids: '{{ lookup("env", "RHEL_pool") }}'
     when: ansible_facts['os_family'] == "RedHat"
+  
+  - name: debug
+    debug:
+      msg: "{{ lookup("env", "RHEL_username") }} {{ lookup("env", "RHEL_password") }} {{ lookup("env", "RHEL_pool") }}"
