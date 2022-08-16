@@ -1,18 +1,22 @@
-- name: Registrar RHELS
-  hosts: all
-  gather_facts: true
- 
-  tasks:   
-  - name: debug
-    debug:
-      msg: '{{ lookup("env", "rhsm_username") }} {{ lookup("env", "rhsm_password") }} {{ lookup("env", "rhsm_pool") }}'
-      
-  - name: Register
+---
+- hosts: all
+  gather_facts: True
+
+  tasks:
+  - name: Install RHSM and Insights
+    yum:
+      name: '{{ item }}'
+      state: present
+    with_items:
+    - redhat-access-insights
+    - subscription-manager
+    
+  - name: Register system
     redhat_subscription:
       state: present
-      username: '{{ lookup("env", "rhsm_username") }}'
-      password: '{{ lookup("env", "rhsm_password") }}'
-      pool_ids: '{{ lookup("env", "rhsm_pool") }}'
+      username: '{{ rhsm_username }}'
+      password: '{{ rhsm_password }}'
+      pool_ids: '{{ rhsm_pool }}'
     when: ansible_facts['os_family'] == "RedHat"
   
 
