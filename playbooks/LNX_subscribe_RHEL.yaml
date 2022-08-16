@@ -17,6 +17,7 @@
       username: '{{ rhsm_username }}'
       password: '{{ rhsm_password }}'
       pool_ids: '{{ rhsm_pool }}'
+      auto_attach: no
     when: ansible_facts['os_family'] == "RedHat"
   
 
