@@ -5,14 +5,14 @@
   tasks:   
   - name: debug
     debug:
-      msg: '{{ lookup("env", "RHEL_username") }} {{ lookup("env", "RHEL_password") }} {{ lookup("env", "RHEL_pool") }}'
+      msg: '{{ lookup("env", "rhsm_username") }} {{ lookup("env", "rhsm_password") }} {{ lookup("env", "rhsm_pool") }}'
       
   - name: Register
     redhat_subscription:
       state: present
-      username: '{{ lookup("env", "RHEL_username") }}'
-      password: '{{ lookup("env", "RHEL_password") }}'
-      pool_ids: '{{ lookup("env", "RHEL_pool") }}'
+      username: '{{ lookup("env", "rhsm_username") }}'
+      password: '{{ lookup("env", "rhsm_password") }}'
+      pool_ids: '{{ lookup("env", "rhsm_pool") }}'
     when: ansible_facts['os_family'] == "RedHat"
   
 
