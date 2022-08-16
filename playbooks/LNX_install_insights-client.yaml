@@ -23,7 +23,14 @@
     changed_when: false
     when: status_result.rc != 0 or 'Insights API confirms registration.' not in status_result.stdout
     
+#  - name: Resultados
+#    debug:
+#      msg: "{{command_result.stdout.split('\n')}}"
+#    when: ansible_facts['os_family'] == "RedHat"
+      
   - name: Resultados
     debug:
-      msg: "{{command_result.stdout.split('\n')}}"
-    when: ansible_facts['os_family'] == "RedHat"
+      msg: "{{item.stdout.split('\n')}}"
+    loop: "{{ command_result.results }}"
+    when: ansible_facts['os_family'] == "RedHat"  
+    
