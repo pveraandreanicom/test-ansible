@@ -1,0 +1,11 @@
+- name: Registrar RHELS
+  hosts: all
+  gather_facts: true
+  
+- name: Register
+  redhat_subscription:
+    state: present
+    username: {{ rhel_usuario }}
+    password: {{ rhel_pass }}
+    pool_ids: {{ rhel_pool }}
+  when: ansible_facts['os_family'] == "RedHat"
