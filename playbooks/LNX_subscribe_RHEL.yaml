@@ -2,10 +2,22 @@
   hosts: all
   gather_facts: true
   
-- name: Register
-  redhat_subscription:
-    state: present
-    username: {{ lookup("env", "RHEL_USERNAME") }}
-    password: {{ lookup("env", "RHEL_PASSWORD") }}
-    pool_ids: {{ lookup("env", "RHEL_POOL") }}
-  when: ansible_facts['os_family'] == "RedHat"
+  tasks:
+  - name: Print some debug information 
+    vars: 
+      msg: |
+        Module Variables ("vars"):
+        --------------------------------
+        {{ vars | to_nice_json }} 
+        
+        Environment Variables ("environment"):
+        --------------------------------
+        {{ environment | to_nice_json }} 
+
+  - name: Register
+    redhat_subscription:
+      state: present
+      username: {{ lookup("env", "RHEL_USERNAME") }}
+      password: {{ lookup("env", "RHEL_PASSWORD") }}
+      pool_ids: {{ lookup("env", "RHEL_POOL") }}
+    when: ansible_facts['os_family'] == "RedHat"
