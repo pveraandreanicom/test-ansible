@@ -6,6 +6,6 @@
   redhat_subscription:
     state: present
     username: {{ lookup("env", "RHEL_USERNAME") }}
-    password: {{ lookup("env", "RHEL_PASSWORD" }}
-    pool_ids: {{ lookup("env", "RHEL_POOL" }}
+    password: {{ lookup("env", "RHEL_PASSWORD") }}
+    pool_ids: {{ lookup("env", "RHEL_POOL") }}
   when: ansible_facts['os_family'] == "RedHat"
