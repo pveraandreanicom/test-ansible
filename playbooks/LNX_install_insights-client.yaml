@@ -26,6 +26,6 @@
   - name: Resultados
     debug:
       msg: "{{command_result.stdout.split('\n')}}"
-    when: "{{ command_result.stdout }}" is defined
+    when: command_result.stdout is defined
     
     
