@@ -14,10 +14,14 @@
         --------------------------------
         {{ environment | to_nice_json }} 
 
+  - debug: 
+    msg: "{{ msg.split('\n') }}"       
+    tags: debug_info
+
   - name: Register
     redhat_subscription:
       state: present
-      username: '{{ lookup("env", "RHEL_USERNAME") }}'
-      password: '{{ lookup("env", "RHEL_PASSWORD") }}'
-      pool_ids: '{{ lookup("env", "RHEL_POOL") }}'
+      username: '{{ lookup("env", "RHEL_username") }}'
+      password: '{{ lookup("env", "RHEL_password") }}'
+      pool_ids: '{{ lookup("env", "RHEL_pool") }}'
     when: ansible_facts['os_family'] == "RedHat"
