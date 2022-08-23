@@ -32,40 +32,26 @@
         - "ambiente {{ ambiente }}"
         - "proyecto {{ proyecto }}"
         - "{{ info.instance.tags }}"
+        
+  - name: Seteamos los tags de ambiente y proyecto para Insight
+    shell: "insights-client insights-client --display-name=${HOSTNAME} --group={{ambiente}} --checkin"
+    register: command_result
+    failed_when: command_result.rc != 0 or 'Successfully checked in' not in command_result.stdout
+    changed_when: false
+    when: ansible_facts['os_family'] == "RedHat"
       
+  - name: Agregamos nuestros tags
+    blockinfile:
+      path: /etc/insights-client/tags.yaml
+      block: |
+        proyecto: {{ proyecto }}
+        ambiente: {{ ambiente }}
+      insertbefore: EOF
+    when: ansible_facts['os_family'] == "RedHat"
 
-#  - name: Copio configuracion en directorio Metricbeat
-#    copy: 
-#      src: archivos/metricbeat-base.yml
-#      dest: /etc/metricbeat/metricbeat.yml
-#    no_log: true
-#
-#  - name: Inserto bloque de custom fields
-#    blockinfile:
-#      path: /etc/metricbeat/metricbeat.yml
-#      marker: ""
-#      block: |
-#        processors:
-#          - add_host_metadata: ~
-#          - add_fields:
-#              target: ''
-#              fields:
-#                tag{{ nombre0 }}: {{ valor0 }}
-#                tag{{ nombre1 }}: {{ valor1 }}
-#                tag{{ nombre2 }}: {{ valor2 }}
-#                tag{{ nombre3 }}: {{ valor3 }}
-#                tag{{ nombre4 }}: {{ valor4 }}
-#                tag{{ nombre5 }}: {{ valor5 }}
-#                tag{{ nombre6 }}: {{ valor6 }}
-#                tag{{ nombre7 }}: {{ valor7 }}
-#                tag{{ nombre8 }}: {{ valor8 }}
-#                tag{{ nombre9 }}: {{ valor9 }}
-#                tag{{ nombre9 }}: {{ valor10 }}
-#                tag{{ nombre9 }}: {{ valor11 }}
-#    no_log: true
-#    
-#  - name: "Reiniciamos servicio Metricbeat"
-#    service:
-#      name: metricbeat
-#      state: restarted
-#    no_log: true
+  - name: Subimos a Insight
+    shell: "insights-client"
+    register: command_result
+    failed_when: command_result.rc != 0 or 'Successfully uploaded report from' not in command_result.stdout
+    changed_when: false
+    when: ansible_facts['os_family'] == "RedHat"
