@@ -2,7 +2,7 @@
 - name: Get tag from virtual machine
   hosts: all
   #connection: local
-  gather_facts: no
+  gather_facts: yes
   tasks:
   - name: Traigo TAGs de SDK VMWARE
     vmware_guest_info:
