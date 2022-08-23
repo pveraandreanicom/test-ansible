@@ -26,12 +26,11 @@
       vambiente: "[?category_name=='ambiente'].name"
       vproyecto: "[?category_name=='proyecto'].name"
 
-  - name: Debugeamo
+  - name: Tags
     debug:
         msg:
         - "ambiente {{ ambiente }}"
         - "proyecto {{ proyecto }}"
-        - "{{ info.instance.tags }}"
         
   - name: Seteamos los tags de ambiente y proyecto para Insight
     shell: "insights-client --display-name=${HOSTNAME} --group={{ambiente}} --checkin"
