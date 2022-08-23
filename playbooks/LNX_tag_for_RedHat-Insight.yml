@@ -34,7 +34,7 @@
         - "{{ info.instance.tags }}"
         
   - name: Seteamos los tags de ambiente y proyecto para Insight
-    shell: "insights-client insights-client --display-name=${HOSTNAME} --group={{ambiente}} --checkin"
+    shell: "insights-client --display-name=${HOSTNAME} --group={{ambiente}} --checkin"
     register: command_result
     failed_when: command_result.rc != 0 or 'Successfully checked in' not in command_result.stdout
     changed_when: false
