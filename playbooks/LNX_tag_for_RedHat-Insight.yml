@@ -24,7 +24,7 @@
   #  no_log: true
     vars:
       vambiente: "[?category_name=='ambiente'].name | [0]"
-      vproyecto: "[?category_name=='proyecto'].name"
+      vproyecto: "[?category_name=='proyecto'].name | [0]"
 
   - name: Tags
     debug:
@@ -32,25 +32,25 @@
         - "ambiente {{ ambiente }}"
         - "proyecto {{ proyecto }}"
         
-#  - name: Seteamos los tags de ambiente y proyecto para Insight
-#    shell: "insights-client --display-name=${HOSTNAME} --group={{ambiente}} --checkin"
-#    register: command_result
-#    failed_when: command_result.rc != 0 or 'Successfully checked in' not in command_result.stdout
-#    changed_when: false
-#    when: ansible_facts['os_family'] == "RedHat"
+  - name: Seteamos los tags de ambiente y proyecto para Insight
+    shell: "insights-client --display-name=${HOSTNAME} --group={{ambiente}} --checkin"
+    register: command_result
+    failed_when: command_result.rc != 0 or 'Successfully checked in' not in command_result.stdout
+    changed_when: false
+    when: ansible_facts['os_family'] == "RedHat"
       
-#  - name: Agregamos nuestros tags
-#    blockinfile:
-#      path: /etc/insights-client/tags.yaml
-#      block: |
-#        proyecto: {{ proyecto }}
-#        ambiente: {{ ambiente }}
-#      insertbefore: EOF
-#    when: ansible_facts['os_family'] == "RedHat"
+  - name: Agregamos nuestros tags
+    blockinfile:
+      path: /etc/insights-client/tags.yaml
+      block: |
+        proyecto: {{ proyecto }}
+        ambiente: {{ ambiente }}
+      insertbefore: EOF
+    when: ansible_facts['os_family'] == "RedHat"
 
-#  - name: Subimos a Insight
-#    shell: "insights-client"
-#    register: command_result
-#    failed_when: command_result.rc != 0 or 'Successfully uploaded report from' not in command_result.stdout
-#    changed_when: false
-#    when: ansible_facts['os_family'] == "RedHat"
+  - name: Subimos a Insight
+    shell: "insights-client"
+    register: command_result
+    failed_when: command_result.rc != 0 or 'Successfully uploaded report from' not in command_result.stdout
+    changed_when: false
+    when: ansible_facts['os_family'] == "RedHat"
