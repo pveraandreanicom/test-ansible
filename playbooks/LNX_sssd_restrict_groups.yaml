@@ -23,6 +23,7 @@
       dest: "{{ sssdconf }}"
       block: |
         ad_access_filter = (|(memberOf=CN=superusuarios,OU=Grupos Andreani,DC=andreani,DC=com,DC=ar)(memberOf={{ adgroup}}))
+        ad_gpo_ignore_unreadable = True
         
   - name: sshd restart
     service:
