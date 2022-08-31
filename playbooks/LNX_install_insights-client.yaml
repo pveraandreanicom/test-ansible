@@ -21,7 +21,7 @@
     register: command_result
     failed_when: command_result.rc != 0
     changed_when: false
-    when: status_result.rc != 0 or 'Insights API confirms registration.' not in status_result.stdout
+    when: status_result.rc != 0 or 'Successfully registered' not in status_result.stdout
     
   - name: Resultados
     debug:
