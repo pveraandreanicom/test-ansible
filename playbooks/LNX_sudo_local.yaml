@@ -20,4 +20,4 @@
       create: yes
       mode: 0440
       validate: 'visudo -cf %s'
-      
+    when: adgroup != "superusuarios"
